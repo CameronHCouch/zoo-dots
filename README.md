@@ -38,6 +38,7 @@ Zoo Dots will be made using vanilla JS, HTML5, and CSS3. Animal images courtesy 
 ## Wireframes
 
 ![js-wireframe](https://user-images.githubusercontent.com/43548466/52319689-1cb6fc00-2999-11e9-9788-f1d3ca6c97c7.jpg)
+![dots replaced with animal faces](https://user-images.githubusercontent.com/43548466/52355804-0a70a880-2a01-11e9-9696-da476d8813d3.png)
 
 ## Implementation Timeline
 

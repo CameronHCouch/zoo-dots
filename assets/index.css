@@ -1,0 +1,26 @@
+h1{
+  font-size: 50px;
+  font-weight: 800;
+}
+
+header{
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+nav{
+  margin-left: 15px;
+}
+
+i{
+  color: black;
+}
+
+a {
+  text-decoration: none;
+}
+
+nav a{
+  margin: 5px;
+}

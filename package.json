@@ -1,0 +1,29 @@
+{
+  "name": "zoo_dots",
+  "version": "1.0.0",
+  "description": "In Zoo Dots, players match two or more animals of the same species. Using only horizontal and vertical lines, players draw a continuous line between neighboring animals, earning points equal to the number selected. Selected animals disappear, existing animals shift down to replace those that were removed, and new animals fall from above to fill any gaps. If a player makes a 2x2 square, every animal of that species is removed from the board.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CameronHCouch/zoo-dots.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CameronHCouch/zoo-dots/issues"
+  },
+  "homepage": "https://github.com/CameronHCouch/zoo-dots#readme",
+  "dependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.29.2",
+    "webpack-cli": "^3.2.3"
+  }
+}
