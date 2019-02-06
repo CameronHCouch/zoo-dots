@@ -1,6 +1,19 @@
+/* tiny css reset */
+html, body, figure, figcaption, ul, li, h1 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  text-align: inherit;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
 h1{
   font-size: 50px;
-  font-weight: 800;
+  font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
 }
 
 header{
@@ -23,4 +36,10 @@ a {
 
 nav a{
   margin: 5px;
+}
+
+#zoo-canvas{
+  width: 480px;
+  height: 640px;
+  align-self: center;
 }
