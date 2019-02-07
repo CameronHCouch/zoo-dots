@@ -7,7 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.height = 640;
 
   const ctx = canvas.getContext('2d');
-  let randomImage = IMAGES[Math.floor(Math.random() * IMAGES.length)];
+
+  function randomImage(){
+    return IMAGES[Math.floor(Math.random() * IMAGES.length)];
+  }
 
   // dots
 
@@ -26,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     for (var x = 0; x < cols; x++) {
       for (var y = 0; y < rows; y++) {
         let image = new Image(25, 25);
-        image.src = `./assets/${randomImage}.png`;
+        image.src = `./assets/${randomImage()}.png`;
         ctx.beginPath();
         ctx.drawImage(
           image,
@@ -40,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
-
+  let counter = 0;
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
@@ -48,8 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
     drawDots();
     drawTimer();
     drawScore();
-
-    requestAnimationFrame(draw);
+    if (counter <= 1) {
+      counter++;
+      requestAnimationFrame(draw);
+    }
   }
 
   // document.addEventListener("mousemove", mouseMoveHandler, false);
@@ -93,3 +98,7 @@ console.log("hiya")
 
 // call draw() fn at bottom of class
 // within draw() definition, call requestAnimationFrame(draw);
+
+//TODO
+
+// fix countdown timer
