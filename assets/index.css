@@ -10,6 +10,14 @@ html, body, figure, figcaption, ul, li, h1 {
   flex-direction: column;
 }
 
+body{
+  background: url(./background.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 h1{
   font-size: 50px;
   font-weight: 600;
@@ -28,6 +36,14 @@ nav{
 
 i{
   color: black;
+  transition: all 0.3s ease;
+}
+
+i:hover{
+  color: white;
+  -webkit-transform: scale(1.25);
+  -ms-transform: scale(1.25);
+  transform: scale(1.25);
 }
 
 a {
