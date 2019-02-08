@@ -1,6 +1,6 @@
-const Grid = require('./grid');
-const Timer = require('./timer');
-const Score = require('./score');
+import Grid from './grid';
+import Timer from './timer';
+import Score from './score';
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,9 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, 480, 640);
-    new Grid();
-    new Timer();
-    new Score();
+    let grid = new Grid();
+    let timer = new Timer();
+    let score = new Score();
+
+    grid.draw();
     // if (counter <= 1) {
     //   counter++;
     //   requestAnimationFrame(draw);

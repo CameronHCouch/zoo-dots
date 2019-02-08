@@ -8,6 +8,13 @@ class Dot {
   }
 
   randomImage() {
+    let IMAGES = {
+      1: 'bear',
+      2: 'frog',
+      3: 'fox',
+      4: 'gorilla',
+      5: 'panda',
+    }
     return IMAGES[Math.floor(Math.random() * IMAGES.length)];
   }
 
@@ -25,12 +32,4 @@ class Dot {
   }
 }
 
-IMAGES = {
-  1: 'bear',
-  2: 'frog',
-  3: 'fox',
-  4: 'gorilla',
-  5: 'panda',
-}
-
-module.exports = Dot;
+export default Dot;
