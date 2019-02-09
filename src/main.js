@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.height = 640;
 
   const ctx = canvas.getContext('2d');
-  let board = new Board(canvas);
+  let board = new Board();
 
   function draw(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // requestAnimationFrame(draw);
     // }
   }
-  canvas.addEventListener("mousedown", board.mouseDownHandler, false);
-  canvas.addEventListener("mouseup", board.mouseUpHandler, false);
+  canvas.addEventListener("mousedown", board.mouseDownHandler.bind(board), false);
+  canvas.addEventListener("mouseup", board.mouseUpHandler.bind(board), false);
 
   draw(ctx);
 

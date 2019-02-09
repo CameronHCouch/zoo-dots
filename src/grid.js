@@ -18,6 +18,28 @@ class Grid {
       }
       this.dots.push(newRow);
     }
+    console.log(this.dots)
+  }
+
+  passUpToDot(e){
+    console.log(e.offsetX, e.offsetY)
+    let wee = this.dots.flat()
+    let answer = wee.find((dot) => {
+      return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28))
+    })
+
+    console.log(answer);
+    // dot.deactivate(e){
+
+    // }
+  }
+
+  passDownToDot(e){
+    console.log(e.offsetX, e.offsetYx)
+
+    // dot.activate(e){
+      
+    // }
   }
 
   draw(ctx) {
@@ -32,6 +54,7 @@ class Grid {
 export default Grid;
 
 
-//Soon-Mi sez: put dots into an array 
-// and then grab dots from array?
-//Jeff sez: look at Asteroids (for that ^ ?)
+// [0,0] = 105..130, 175..200  [1,0] = 155..180,175..200
+// [1,0] = 105..130, 225..250
+
+// give each one x and y range of -25, I spose

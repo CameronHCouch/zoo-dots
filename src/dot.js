@@ -7,6 +7,8 @@ class Dot {
     this.margin = 50;
     this.yStart = 150;
     this.xStart = 80;
+    this.x = this.dotWidth + (this.margin * this.pos[0]) + this.xStart,
+    this.y = this.dotHeight + (this.margin * this.pos[1]) + this.yStart
     this.image = '';
   }
 
@@ -27,7 +29,7 @@ class Dot {
       ctx.drawImage(
         img,
         this.dotWidth + (this.margin * this.pos[0]) + this.xStart,
-        this.dotWidth + (this.margin * this.pos[1]) + this.xStart,
+        this.dotHeight + (this.margin * this.pos[1]) + this.yStart,
         this.dotWidth,
         this.dotHeight,
         );
