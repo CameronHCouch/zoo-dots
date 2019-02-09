@@ -1,6 +1,6 @@
-import Grid from './grid';
-import Timer from './timer';
-import Score from './score';
+
+import Board from './game_board';
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -9,27 +9,26 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.height = 640;
 
   const ctx = canvas.getContext('2d');
+  let board = new Board(canvas);
 
-  function draw() {
+  function draw(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, 480, 640);
-    let grid = new Grid();
-    // let timer = new Timer();
-    // let score = new Score();
-    grid.draw(ctx);
+    board.draw(ctx);
+
     // if (counter <= 1) {
     //   counter++;
       // requestAnimationFrame(draw);
     // }
   }
-  
-  // document.addEventListener("mousemove", mouseMoveHandler, false);
-  // canvas.addEventListener('click', function () { }, false);
+  canvas.addEventListener("mousedown", board.mouseDownHandler, false);
+  canvas.addEventListener("mouseup", board.mouseUpHandler, false);
 
-  draw();
+  draw(ctx);
 
 })
+
 
 console.log("hiya")
 
