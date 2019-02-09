@@ -1,34 +1,40 @@
 class Dot {
-  constructor(ctx) {
-    this.ctx = ctx;
-    this.image = new Image(25, 25);
-    this.image.src = `./assets/${this.randomImage()}.png`;
+  constructor(pos) {
     this.dotWidth = 25;
     this.dotHeight = 25;
+    this.species = this.randomSpecies();
+    this.pos = pos;
+    this.margin = 50;
+    this.yStart = 150;
+    this.xStart = 80;
+    this.image = '';
   }
 
-  randomImage() {
-    let IMAGES = {
-      1: 'bear',
-      2: 'frog',
-      3: 'fox',
-      4: 'gorilla',
-      5: 'panda',
-    }
-    return IMAGES[Math.floor(Math.random() * IMAGES.length)];
+  randomSpecies() {
+    let speciesList = ['bear', 'frog', 'fox', 'gorilla', 'panda']
+    return speciesList[Math.floor(Math.random() * speciesList.length)];
   }
 
-  draw() {
-    this.ctx.beginPath();
-    this.ctx.drawImage(
-      image,
-      dotWidth + (50 * x) + xStart,
-      dotWidth + margin * y + yStart,
-      dotWidth,
-      dotHeight
-    );
-    this.ctx.closePath();
-    this.ctx.fill();
+  draw(ctx) {
+    let img = new Image(25, 25);
+    img.onload = () => {
+      ctx.beginPath();
+      // ctx.arc(
+        //   this.dotWidth + (this.margin * this.pos[0]) + this.xStart, 
+        //   this.dotWidth + (this.margin * this.pos[1]) + this.xStart, 
+        //   12.5, 0, 2 * Math.PI, true
+        // );
+      ctx.drawImage(
+        img,
+        this.dotWidth + (this.margin * this.pos[0]) + this.xStart,
+        this.dotWidth + (this.margin * this.pos[1]) + this.xStart,
+        this.dotWidth,
+        this.dotHeight,
+        );
+        ctx.closePath();
+        ctx.fill();
+      }
+    img.src = `./assets/${this.species}.png`;
   }
 }
 

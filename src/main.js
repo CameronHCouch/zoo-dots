@@ -15,20 +15,19 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, 480, 640);
     let grid = new Grid();
-    let timer = new Timer();
-    let score = new Score();
-
-    grid.draw();
+    // let timer = new Timer();
+    // let score = new Score();
+    grid.draw(ctx);
     // if (counter <= 1) {
     //   counter++;
-    //   requestAnimationFrame(draw);
+      // requestAnimationFrame(draw);
     // }
   }
   
   // document.addEventListener("mousemove", mouseMoveHandler, false);
   // canvas.addEventListener('click', function () { }, false);
 
-  requestAnimationFrame(draw);
+  draw();
 
 })
 
