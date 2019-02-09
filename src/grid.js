@@ -1,7 +1,8 @@
 import Dot from './dot';
 
 class Grid {
-  constructor() {
+  constructor(ctx) {
+    this.ctx = ctx;
     this.rows = 6;
     this.cols = 6;
     this.dots = [];
@@ -18,34 +19,45 @@ class Grid {
       }
       this.dots.push(newRow);
     }
-    console.log(this.dots)
+    console.log(this.dots);
   }
 
   passUpToDot(e){
-    console.log(e.offsetX, e.offsetY)
-    let wee = this.dots.flat()
-    let answer = wee.find((dot) => {
-      return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28))
+    console.log(e.offsetX, e.offsetY);
+    let flattened = this.dots.flat();
+    let finishDot = flattened.find((dot) => {
+      return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28));
     })
 
-    console.log(answer);
+    console.log(finishDot);
+
+
+    // find all active dots and deactivate them
+    // or: remove them from board?
     // dot.deactivate(e){
 
     // }
   }
 
   passDownToDot(e){
-    console.log(e.offsetX, e.offsetYx)
+    console.log(e.offsetX, e.offsetY);
+    let flattened = this.dots.flat();
+    let startDot = flattened.find((dot) => {
+      return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
+    });
 
-    // dot.activate(e){
-      
-    // }
+    console.log(startDot);
+    if (startDot) {
+      startDot.activate();
+      this.draw(this.ctx);
+    };
   }
 
-  draw(ctx) {
+  draw() {
+    console.log('ey')
     this.dots.forEach((row) => {
       row.forEach((dot) => {
-        dot.draw(ctx);
+        dot.draw(this.ctx);
       })
     })
   }

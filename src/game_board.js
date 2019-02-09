@@ -3,17 +3,18 @@ import Timer from './timer';
 import Score from './score';
 
 class GameBoard {
-  constructor() {
-    this.grid = new Grid();
+  constructor(ctx) {
+    this.grid = new Grid(ctx);
     this.timer = new Timer();
     this.score = new Score();
+    this.ctx = ctx;
   }
   // dots
 
-  draw(ctx) {
-    this.timer.draw(ctx);
-    this.score.draw(ctx);
-    this.grid.draw(ctx);
+  draw() {
+    this.timer.draw(this.ctx);
+    this.score.draw(this.ctx);
+    this.grid.draw();
     // if (counter <= 1) {
     //   counter++;
     // requestAnimationFrame(draw);

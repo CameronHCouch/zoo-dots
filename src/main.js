@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.height = 640;
 
   const ctx = canvas.getContext('2d');
-  let board = new Board();
+  let board = new Board(ctx);
 
   function draw(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, 480, 640);
-    board.draw(ctx);
+    board.draw();
 
     // if (counter <= 1) {
     //   counter++;

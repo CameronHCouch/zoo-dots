@@ -10,6 +10,7 @@ class Dot {
     this.x = this.dotWidth + (this.margin * this.pos[0]) + this.xStart,
     this.y = this.dotHeight + (this.margin * this.pos[1]) + this.yStart
     this.image = '';
+    this.active = false;
   }
 
   randomSpecies() {
@@ -17,9 +18,54 @@ class Dot {
     return speciesList[Math.floor(Math.random() * speciesList.length)];
   }
 
+  activate() {
+    this.active = true;
+  }
+
+  speciesColor(species) {
+    switch(species){
+      case 'bear':
+        return 'rgba(155, 104, 66, 1)';
+      case 'frog':
+        return 'rgba(142, 203, 30, 1)';
+      case 'fox':
+        return 'rgba(234, 135, 0, 1)';
+      case 'gorilla':
+        return 'rgba(59, 69, 77, 1)';
+      case 'panda':
+        return 'rgba(255, 255, 255, 1)'
+      default:
+        return ''
+    }
+  }
+
   draw(ctx) {
     let img = new Image(25, 25);
     img.onload = () => {
+      if (this.active) {
+        let species = this.speciesColor(this.species)
+        // rgba colors increase in opacity each time grid is re-rendered
+        // need to clear board each time?
+        ctx.beginPath();
+        ctx.fillStyle = species.slice(0, species.length-2) + '0.6)';
+        ctx.arc(this.x + 12.5, this.y + 12.5, 19, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.fillStyle = species.slice(0, species.length - 2) + '0.7)';
+        ctx.arc(this.x + 12.5, this.y + 12.5, 17.75, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.fillStyle = species.slice(0, species.length - 2) + '0.8)';
+        ctx.arc(this.x + 12.5, this.y + 12.5, 16.5, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.fillStyle = species;
+        ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
+        ctx.fill();
+      }
       ctx.beginPath();
       // ctx.arc(
         //   this.dotWidth + (this.margin * this.pos[0]) + this.xStart, 
@@ -28,8 +74,8 @@ class Dot {
         // );
       ctx.drawImage(
         img,
-        this.dotWidth + (this.margin * this.pos[0]) + this.xStart,
-        this.dotHeight + (this.margin * this.pos[1]) + this.yStart,
+        this.x,
+        this.y,
         this.dotWidth,
         this.dotHeight,
         );
