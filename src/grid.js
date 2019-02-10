@@ -7,7 +7,6 @@ class Grid {
     this.rows = 6;
     this.cols = 6;
     this.dots = [];
-    this.dotQueue = [];
     this.addDots();
 
     this.line = false;
@@ -45,7 +44,7 @@ class Grid {
     if (this.chainedDots.length > 1) {
       this.clearDotsFromBoard();
       this.dropDownRemainingDots();
-      // this.fillGapsWithNewDots();
+      this.fillGapsWithNewDots();
       this.draw(this.ctx);
       this.draw(this.ctx2);
     }
@@ -55,11 +54,11 @@ class Grid {
     let sortable = true;
     while (sortable) {
       sortable = false;
-      this.dots.forEach((col) => {
-        col.forEach((dot, idx) => {
-          if (idx < col.length - 1) {
+      this.dots.forEach((row) => {
+        row.forEach((dot, idx) => {
+          if (idx < row.length - 1) {
             let upperDot = dot;
-            let lowerDot = col[idx + 1];
+            let lowerDot = row[idx + 1];
             if ((lowerDot.species === 'sentinel') && 
                 (upperDot.species !== 'sentinel')) {
               lowerDot.species = upperDot.species;
@@ -86,6 +85,18 @@ class Grid {
       })
     })
   }
+
+  fillGapsWithNewDots() {
+    this.dots.forEach((row, idx1) => {
+      // console.log(row);
+      row.forEach((dot, idx2) => {
+        if (dot.species === 'sentinel') {
+          this.dots[idx1][idx2] = new Dot([idx1,idx2]);
+        }
+      })
+    })
+  }
+
 
   passDownToDot(e){
     console.log(e.offsetX, e.offsetY);
@@ -127,6 +138,7 @@ class Grid {
       this.ctx2.clearRect(0,0,480,640);
       this.ctx2.strokeStyle = this.startDot.color;
       this.ctx2.lineWidth = 5;
+
       this.ctx2.beginPath();
       this.ctx2.moveTo(e.offsetX, e.offsetY);
       this.ctx2.lineTo(this.lineStartX, this.lineStartY);
@@ -142,11 +154,10 @@ class Grid {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
     });
 
-    if (
-      (neighborDot.pos !== this.startDot.pos) && 
-      (neighborDot.species === this.startDot.species) &&
-      (!this.chainedDots.includes(neighborDot))
-      ){
+    if ((neighborDot.pos !== this.startDot.pos) && 
+       (neighborDot.species === this.startDot.species) &&
+       (!this.chainedDots.includes(neighborDot))
+       ){
       neighborDot.activate();
       this.chainedDots.push(neighborDot);
     }
@@ -164,7 +175,6 @@ class Grid {
   // }
 
   draw(ctx) {
-
     this.dots.forEach((row) => {
       row.forEach((dot) => {
         dot.draw(ctx);
