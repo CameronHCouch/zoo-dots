@@ -34,6 +34,7 @@ class GameBoard {
 
   mouseMoveHandler(e) {
     this.grid.drawLine(e);
+    this.grid.connectDots(e);
   }
 
 // document.addEventListener("mousemove", mouseMoveHandler, false);

@@ -14,9 +14,11 @@ class Grid {
     this.lineStartX = '';
     this.lineStartY = '';
     this.startDot = '';
-  }
-  // dots
 
+    this.chainedDots = [];
+  }
+
+  // dots
   addDots(){
     for (var x = 0; x < this.cols; x++) {
       let newRow = [];
@@ -34,7 +36,6 @@ class Grid {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28));
     })
 
-    // this.ctx.clearRect(0, 0, 480, 640);
     console.log(finishDot);
 
 
@@ -55,7 +56,11 @@ class Grid {
     if (startDot) {
       this.startDot = startDot;
       startDot.activate();
+      this.chainedDots.push(startDot);
       this.draw(this.ctx);
+      console.log(`it me`) 
+      console.log(this.chainedDots);
+      console.log('me no nmore')
     };
 
     // snap line to center of selected Dot
@@ -68,25 +73,42 @@ class Grid {
     if (onOrOff === 'on') {
     this.line = true;
     } else {
+      console.log(this);
       this.line = false;
       this.lineStartX = '';
       this.lineStartY = '';
       this.startDot = '';
       this.ctx2.strokeStyle = "";
+      this.chainedDots = [];
+      console.log(this);
     }
   }
   
   drawLine(e) {
     if (this.line) {
-      this.draw(this.ctx2);
       this.ctx2.clearRect(0,0,480,640);
-      this.draw(this.ctx);
       this.ctx2.strokeStyle = this.startDot.color;
       this.ctx2.lineWidth = 5;
       this.ctx2.beginPath();
       this.ctx2.moveTo(e.offsetX, e.offsetY);
       this.ctx2.lineTo(this.lineStartX, this.lineStartY);
       this.ctx2.stroke();
+    }
+  }
+
+  connectDots(e) {
+    let flattened = this.dots.flat();
+    let neighborDot = flattened.find((dot) => {
+      return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
+    });
+
+    if (
+      (neighborDot.pos !== this.startDot.pos) && 
+      (neighborDot.species === this.startDot.species) &&
+      (!this.chainedDots.includes(neighborDot))
+      ){
+      neighborDot.activate();
+      this.chainedDots.push(neighborDot);
     }
   }
 
