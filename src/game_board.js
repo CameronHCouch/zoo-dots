@@ -8,8 +8,8 @@ class GameBoard {
     this.timer = new Timer();
     this.score = new Score();
     this.ctx = ctx;
+    this.handleMouseMove = false;
   }
-  // dots
 
   draw() {
     this.timer.draw(this.ctx);
@@ -24,20 +24,21 @@ class GameBoard {
   mouseDownHandler(e) {
     this.grid.passDownToDot(e);
     this.grid.toggleLineDrawing('on');
+    this.handleMouseMove = true;
   }
   
   mouseUpHandler(e) {
-    console.log('board up')
     this.grid.passUpToDot(e);
     this.grid.toggleLineDrawing('off');
+    this.handleMouseMove = false;
   }
 
   mouseMoveHandler(e) {
-    this.grid.drawLine(e);
-    this.grid.connectDots(e);
+    if (this.handleMouseMove) {
+      this.grid.drawLine(e);
+      this.grid.connectDots(e);
+    }
   }
-
-// document.addEventListener("mousemove", mouseMoveHandler, false);
 }
 
 export default GameBoard;

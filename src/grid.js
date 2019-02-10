@@ -17,7 +17,6 @@ class Grid {
     this.chainedDots = [];
   }
 
-  // dots
   addDots(){
     for (var x = 0; x < this.cols; x++) {
       let newRow = [];
@@ -34,7 +33,6 @@ class Grid {
     let finishDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28));
     })
-    console.log(finishDot);
     this.handleClear();
   }
 
@@ -72,7 +70,7 @@ class Grid {
   }
 
   clearDotsFromBoard() {
-    console.log(this.chainedDots);
+    // console.log(this.chainedDots);
     this.chainedDots.forEach((dot) => {
       dot.markForRemoval();
     })
@@ -88,7 +86,6 @@ class Grid {
 
   fillGapsWithNewDots() {
     this.dots.forEach((row, idx1) => {
-      // console.log(row);
       row.forEach((dot, idx2) => {
         if (dot.species === 'sentinel') {
           this.dots[idx1][idx2] = new Dot([idx1,idx2]);
@@ -122,14 +119,12 @@ class Grid {
     if (onOrOff === 'on') {
     this.line = true;
     } else {
-      console.log(this);
       this.line = false;
       this.lineStartX = '';
       this.lineStartY = '';
       this.startDot = '';
       this.ctx2.strokeStyle = "";
       this.chainedDots = [];
-      console.log(this);
     }
   }
   
@@ -154,9 +149,13 @@ class Grid {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
     });
 
-    if ((neighborDot.pos !== this.startDot.pos) && 
-       (neighborDot.species === this.startDot.species) &&
-       (!this.chainedDots.includes(neighborDot))
+    // console.log('my neighbor is: ')
+    // console.log(neighborDot);
+    console.log(this.chainedDots);
+
+    if ((neighborDot.species === this.startDot.species) &&
+       (!this.chainedDots.includes(neighborDot)) &&
+       (this.validMove(neighborDot))
        ){
       neighborDot.activate();
       this.chainedDots.push(neighborDot);
@@ -165,14 +164,21 @@ class Grid {
     this.draw(this.ctx);
   }
 
-  // TODO: write these to shorten connectDots if statement logic
-  // speciesCheck(dot1, dot2) {
+  validMove(neighbor){
+    let lastSelected = this.chainedDots[this.chainedDots.length-1];
+    let [row,col] = lastSelected.pos;
+    const validMoves = [
+      [row, col-1].join(','),
+      [row, col+1].join(','),
+      [row+1, col].join(','),
+      [row-1, col].join(',')
+    ];
 
-  // }
-
-  // neighborCheck(dot1, dot2) {
-
-  // }
+    if (validMoves.includes(neighbor.pos.join(','))){ 
+      return true ;
+    }
+    return false;
+  }
 
   draw(ctx) {
     this.dots.forEach((row) => {
