@@ -37,33 +37,29 @@ class Grid {
     })
     console.log(finishDot);
     this.handleClear();
-
-    // find all active dots and deactivate them
-    // or: remove them from board?
-    // dot.deactivate(e){
-
-    // }
   }
 
   // where does game logic happen? aka. adding points to score?
   // points are sum of chainedDots
   handleClear(){
-    this.clearDotsFromBoard();
-    this.dropDownRemainingDots();
-    // this.fillGapsWithNewDots();
-    this.draw(this.ctx);
-    this.draw(this.ctx2);
+    if (this.chainedDots.length > 1) {
+      this.clearDotsFromBoard();
+      this.dropDownRemainingDots();
+      // this.fillGapsWithNewDots();
+      this.draw(this.ctx);
+      this.draw(this.ctx2);
+    }
   }
 
   dropDownRemainingDots() {
     let sortable = true;
     while (sortable) {
       sortable = false;
-      this.dots.forEach((row) => {
-        row.forEach((dot, idx) => {
-          if (idx < row.length - 1) {
+      this.dots.forEach((col) => {
+        col.forEach((dot, idx) => {
+          if (idx < col.length - 1) {
             let upperDot = dot;
-            let lowerDot = row[idx + 1];
+            let lowerDot = col[idx + 1];
             if ((lowerDot.species === 'sentinel') && 
                 (upperDot.species !== 'sentinel')) {
               lowerDot.species = upperDot.species;

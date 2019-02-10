@@ -69,7 +69,7 @@ class Dot {
       }
     
     if (this.species === 'sentinel') {
-      
+
     }
     }
     
