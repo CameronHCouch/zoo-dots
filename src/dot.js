@@ -10,6 +10,7 @@ class Dot {
     this.x = this.dotWidth + (this.margin * this.pos[0]) + this.xStart,
     this.y = this.dotHeight + (this.margin * this.pos[1]) + this.yStart
     this.image = '';
+    this.color = '';
     this.active = false;
   }
 
@@ -43,26 +44,26 @@ class Dot {
     let img = new Image(25, 25);
     img.onload = () => {
       if (this.active) {
-        let species = this.speciesColor(this.species)
+        this.color = this.speciesColor(this.species)
         // rgba colors increase in opacity each time grid is re-rendered
         // need to clear board each time?
         ctx.beginPath();
-        ctx.fillStyle = species.slice(0, species.length-2) + '0.6)';
+        ctx.fillStyle = this.color.slice(0, this.color.length-2) + '0.6)';
         ctx.arc(this.x + 12.5, this.y + 12.5, 19, 0, 2 * Math.PI);
         ctx.fill();
 
         ctx.beginPath();
-        ctx.fillStyle = species.slice(0, species.length - 2) + '0.7)';
+        ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.7)';
         ctx.arc(this.x + 12.5, this.y + 12.5, 17.75, 0, 2 * Math.PI);
         ctx.fill();
 
         ctx.beginPath();
-        ctx.fillStyle = species.slice(0, species.length - 2) + '0.8)';
+        ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.8)';
         ctx.arc(this.x + 12.5, this.y + 12.5, 16.5, 0, 2 * Math.PI);
         ctx.fill();
 
         ctx.beginPath();
-        ctx.fillStyle = species;
+        ctx.fillStyle = this.color;
         ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
         ctx.fill();
       }

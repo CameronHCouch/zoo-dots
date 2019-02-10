@@ -21,12 +21,19 @@ class GameBoard {
     // }
   }
 
-  mouseDownHandler(e){
+  mouseDownHandler(e) {
     this.grid.passDownToDot(e);
+    this.grid.toggleLineDrawing('on');
   }
   
   mouseUpHandler(e) {
+    console.log('board up')
     this.grid.passUpToDot(e);
+    this.grid.toggleLineDrawing('off');
+  }
+
+  mouseMoveHandler(e) {
+    this.grid.drawLine(e);
   }
 
 // document.addEventListener("mousemove", mouseMoveHandler, false);

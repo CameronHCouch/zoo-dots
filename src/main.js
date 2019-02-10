@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function draw(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
-    ctx.strokeRect(0, 0, 480, 640);
+    ctx.strokeRect(0, 0, canvas.width, canvas.height);
     board.draw();
 
     // if (counter <= 1) {
@@ -24,13 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   canvas.addEventListener("mousedown", board.mouseDownHandler.bind(board), false);
   canvas.addEventListener("mouseup", board.mouseUpHandler.bind(board), false);
+  canvas.addEventListener("mousemove", board.mouseMoveHandler.bind(board), false);
 
   draw(ctx);
 
 })
-
-
-console.log("hiya")
 
 // Workflow: define dimensions and properties of a thing
 // Use canvas to draw the thing
