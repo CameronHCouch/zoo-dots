@@ -1,8 +1,9 @@
 class Dot {
-  constructor(pos) {
+  constructor(pos, sentinel) {
     this.dotWidth = 25;
     this.dotHeight = 25;
-    this.species = this.randomSpecies();
+    this.speciesList = ['bear', 'frog', 'fox', 'gorilla', 'panda'];
+    this.species = sentinel || this.randomSpecies();
     this.pos = pos;
     this.margin = 50;
     this.yStart = 150;
@@ -12,15 +13,20 @@ class Dot {
     this.image = '';
     this.color = '';
     this.active = false;
+    this.destroy = false;
   }
 
   randomSpecies() {
-    let speciesList = ['bear', 'frog', 'fox', 'gorilla', 'panda']
-    return speciesList[Math.floor(Math.random() * speciesList.length)];
+    return this.speciesList[Math.floor(Math.random() * this.speciesList.length)];
   }
 
   activate() {
     this.active = true;
+  }
+
+  markForRemoval() {
+    this.active = false;
+    this.destroy = true;
   }
 
   speciesColor(species) {
@@ -40,51 +46,56 @@ class Dot {
     }
   }
 
+  
   draw(ctx) {
     let img = new Image(25, 25);
-    img.onload = () => {
-      if (this.active) {
-        this.color = this.speciesColor(this.species)
-        // rgba colors increase in opacity each time grid is re-rendered
-        // need to clear board each time?
+    if (this.speciesList.includes(this.species)){
+      img.onload = () => {
+        if (this.active) {
+          this.drawHalo(ctx);
+        }
         ctx.beginPath();
-        ctx.fillStyle = this.color.slice(0, this.color.length-2) + '0.6)';
-        ctx.arc(this.x + 12.5, this.y + 12.5, 19, 0, 2 * Math.PI);
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.7)';
-        ctx.arc(this.x + 12.5, this.y + 12.5, 17.75, 0, 2 * Math.PI);
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.8)';
-        ctx.arc(this.x + 12.5, this.y + 12.5, 16.5, 0, 2 * Math.PI);
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.fillStyle = this.color;
-        ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
-        ctx.fill();
+        ctx.drawImage(
+          img,
+          this.x,
+          this.y,
+          this.dotWidth,
+          this.dotHeight,
+          );
+          ctx.closePath();
+          ctx.fill();
+        }
+        img.src = `./assets/${this.species}.png`;
       }
-      ctx.beginPath();
-      // ctx.arc(
-        //   this.dotWidth + (this.margin * this.pos[0]) + this.xStart, 
-        //   this.dotWidth + (this.margin * this.pos[1]) + this.xStart, 
-        //   12.5, 0, 2 * Math.PI, true
-        // );
-      ctx.drawImage(
-        img,
-        this.x,
-        this.y,
-        this.dotWidth,
-        this.dotHeight,
-        );
-        ctx.closePath();
-        ctx.fill();
-      }
-    img.src = `./assets/${this.species}.png`;
+    
+    if (this.species === 'sentinel') {
+      
+    }
+    }
+    
+  drawHalo(ctx){
+    this.color = this.speciesColor(this.species)
+    // rgba colors increase in opacity each time grid is re-rendered
+    // need to clear board each time?
+    ctx.beginPath();
+    ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.6)';
+    ctx.arc(this.x + 12.5, this.y + 12.5, 19, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.7)';
+    ctx.arc(this.x + 12.5, this.y + 12.5, 17.75, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.8)';
+    ctx.arc(this.x + 12.5, this.y + 12.5, 16.5, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
+    ctx.fill();
   }
 }
-
-export default Dot;
+    export default Dot;

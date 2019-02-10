@@ -35,15 +35,60 @@ class Grid {
     let finishDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28));
     })
-
     console.log(finishDot);
-
+    this.handleClear();
 
     // find all active dots and deactivate them
     // or: remove them from board?
     // dot.deactivate(e){
 
     // }
+  }
+
+  // where does game logic happen? aka. adding points to score?
+  // points are sum of chainedDots
+  handleClear(){
+    this.clearDotsFromBoard();
+    this.dropDownRemainingDots();
+    // this.fillGapsWithNewDots();
+    this.draw(this.ctx);
+    this.draw(this.ctx2);
+  }
+
+  dropDownRemainingDots() {
+    let sortable = true;
+    while (sortable) {
+      sortable = false;
+      this.dots.forEach((row) => {
+        row.forEach((dot, idx) => {
+          if (idx < row.length - 1) {
+            let upperDot = dot;
+            let lowerDot = row[idx + 1];
+            if ((lowerDot.species === 'sentinel') && 
+                (upperDot.species !== 'sentinel')) {
+              lowerDot.species = upperDot.species;
+              upperDot.species = 'sentinel';
+              sortable = true;
+            }
+          }
+        })
+      })
+    }
+  }
+
+  clearDotsFromBoard() {
+    console.log(this.chainedDots);
+    this.chainedDots.forEach((dot) => {
+      dot.markForRemoval();
+    })
+    this.dots.forEach((row) => {
+      row.forEach((dot) => {
+        if (dot.destroy) {
+          let [x,y] = dot.pos;
+          this.dots[x][y] = new Dot(dot.pos, "sentinel")
+        }
+      })
+    })
   }
 
   passDownToDot(e){
@@ -58,9 +103,6 @@ class Grid {
       startDot.activate();
       this.chainedDots.push(startDot);
       this.draw(this.ctx);
-      console.log(`it me`) 
-      console.log(this.chainedDots);
-      console.log('me no nmore')
     };
 
     // snap line to center of selected Dot
@@ -96,6 +138,8 @@ class Grid {
     }
   }
 
+  //TODO: ensure dot is neighboring last neighbor when chaining neighbors
+
   connectDots(e) {
     let flattened = this.dots.flat();
     let neighborDot = flattened.find((dot) => {
@@ -110,9 +154,21 @@ class Grid {
       neighborDot.activate();
       this.chainedDots.push(neighborDot);
     }
+
+    this.draw(this.ctx);
   }
 
+  // TODO: write these to shorten connectDots if statement logic
+  // speciesCheck(dot1, dot2) {
+
+  // }
+
+  // neighborCheck(dot1, dot2) {
+
+  // }
+
   draw(ctx) {
+
     this.dots.forEach((row) => {
       row.forEach((dot) => {
         dot.draw(ctx);
