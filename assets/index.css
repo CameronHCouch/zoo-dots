@@ -6,8 +6,6 @@ html, body, figure, figcaption, ul, li, h1 {
   font: inherit;
   text-align: inherit;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
 }
 
 body{
@@ -57,5 +55,16 @@ nav a{
 #zoo-canvas{
   width: 480px;
   height: 640px;
-  align-self: center;
+  z-index: 1;
+}
+
+#zoo-canvas2{
+  width: 480px;
+  height: 640px;
+}
+
+.center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
 }

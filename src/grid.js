@@ -1,8 +1,9 @@
 import Dot from './dot';
 
 class Grid {
-  constructor(ctx) {
+  constructor(ctx, ctx2) {
     this.ctx = ctx;
+    this.ctx2 = ctx2;
     this.rows = 6;
     this.cols = 6;
     this.dots = [];
@@ -71,25 +72,28 @@ class Grid {
       this.lineStartX = '';
       this.lineStartY = '';
       this.startDot = '';
-      this.ctx.strokeStyle = "";
+      this.ctx2.strokeStyle = "";
     }
   }
   
   drawLine(e) {
     if (this.line) {
-      this.ctx.strokeStyle = this.startDot.color;
-      this.ctx.lineWidth = 5;
-      this.ctx.beginPath();
-      this.ctx.moveTo(e.offsetX, e.offsetY);
-      this.ctx.lineTo(this.lineStartX, this.lineStartY);
-      this.ctx.stroke();
+      this.draw(this.ctx2);
+      this.ctx2.clearRect(0,0,480,640);
+      this.draw(this.ctx);
+      this.ctx2.strokeStyle = this.startDot.color;
+      this.ctx2.lineWidth = 5;
+      this.ctx2.beginPath();
+      this.ctx2.moveTo(e.offsetX, e.offsetY);
+      this.ctx2.lineTo(this.lineStartX, this.lineStartY);
+      this.ctx2.stroke();
     }
   }
 
-  draw() {
+  draw(ctx) {
     this.dots.forEach((row) => {
       row.forEach((dot) => {
-        dot.draw(this.ctx);
+        dot.draw(ctx);
       })
     })
   }
