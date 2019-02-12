@@ -18,13 +18,13 @@ class GameBoard {
   }
 
   mouseDownHandler(e) {
-    this.grid.passDownToDot(e);
+    this.grid.handleMouseDown(e);
     this.grid.toggleLineDrawing('on');
     this.handleMouseMove = true;
   }
   
   mouseUpHandler(e) {
-    this.grid.passUpToDot(e);
+    this.grid.handleMouseUp(e);
     this.grid.toggleLineDrawing('off');
     this.handleMouseMove = false;
   }

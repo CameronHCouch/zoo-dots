@@ -15,6 +15,7 @@ class Grid {
     this.lineStartX = '';
     this.lineStartY = '';
     this.startDot = '';
+    this.cleared = true;
 
     this.chainedDots = [];
   }
@@ -29,27 +30,22 @@ class Grid {
     }
   }
 
-  passUpToDot(e){
-    console.log(e.offsetX, e.offsetY);
+  handleMouseUp(e){
     let flattened = this.dots.flat();
     let finishDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28));
     })
-    this.handleClear();
+    this.score.score += this.chainedDots.length;
+    this.handleClear(finishDot);
   }
 
-  // where does game logic happen? aka. adding points to score?
-  // points are sum of chainedDots
-  handleClear(){
+  handleClear(finishDot){
     if (this.chainedDots.length > 1) {
-      this.clearDotsFromBoard();
+      this.clearDotsFromBoard(finishDot);
       this.dropDownRemainingDots();
       this.fillGapsWithNewDots();
-      this.score.score += this.chainedDots.length;
-      this.draw(this.ctx);
-      this.draw(this.ctx2);
     }
-    this.clearSelectionRiffRaff();
+    this.clearLine();
   }
 
   dropDownRemainingDots() {
@@ -73,8 +69,12 @@ class Grid {
     }
   }
 
-  clearDotsFromBoard() {
-    // console.log(this.chainedDots);
+  clearDotsFromBoard(finishDot) {
+    console.log(this.startDot === finishDot);
+    // if ((this.startDot === finishDot) &&
+    //     ()
+
+
     this.chainedDots.forEach((dot) => {
       dot.markForRemoval();
     })
@@ -98,8 +98,7 @@ class Grid {
     })
   }
 
-
-  passDownToDot(e){
+  handleMouseDown(e){
     console.log(e.offsetX, e.offsetY);
     let flattened = this.dots.flat();
     let startDot = flattened.find((dot) => {
@@ -134,6 +133,7 @@ class Grid {
   
   drawLine(e) {
     if (this.line) {
+      this.cleared = false;
       this.ctx2.clearRect(0,0,480,640);
       this.ctx2.strokeStyle = this.startDot.color;
       this.ctx2.lineWidth = 5;
@@ -145,7 +145,7 @@ class Grid {
     }
   }
 
-  clearSelectionRiffRaff(){
+  clearLine(){
     this.ctx2.clearRect(0, 0, 480, 640);
   }
 
@@ -186,7 +186,7 @@ class Grid {
   draw(ctx) {
     this.dots.forEach((row) => {
       row.forEach((dot) => {
-        dot.draw(ctx);
+        dot.draw(ctx, this.ctx2);
       })
     })
   }

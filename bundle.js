@@ -172,6 +172,8 @@ function () {
         img.onload = function () {
           if (_this.active) {
             _this.drawHalo(ctx);
+          } else {
+            _this.clearHalo(ctx);
           }
 
           ctx.beginPath();
@@ -207,6 +209,11 @@ function () {
       ctx.fillStyle = this.color;
       ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
       ctx.fill();
+    }
+  }, {
+    key: "clearHalo",
+    value: function clearHalo(ctx) {
+      ctx.clearRect(this.x - 12.5, this.y - 12.5, 45, 45);
     }
   }]);
 
@@ -262,14 +269,14 @@ function () {
   }, {
     key: "mouseDownHandler",
     value: function mouseDownHandler(e) {
-      this.grid.passDownToDot(e);
+      this.grid.handleMouseDown(e);
       this.grid.toggleLineDrawing('on');
       this.handleMouseMove = true;
     }
   }, {
     key: "mouseUpHandler",
     value: function mouseUpHandler(e) {
-      this.grid.passUpToDot(e);
+      this.grid.handleMouseUp(e);
       this.grid.toggleLineDrawing('off');
       this.handleMouseMove = false;
     }
@@ -333,6 +340,7 @@ function () {
     this.lineStartX = '';
     this.lineStartY = '';
     this.startDot = '';
+    this.cleared = true;
     this.chainedDots = [];
   }
 
@@ -350,30 +358,25 @@ function () {
       }
     }
   }, {
-    key: "passUpToDot",
-    value: function passUpToDot(e) {
-      console.log(e.offsetX, e.offsetY);
+    key: "handleMouseUp",
+    value: function handleMouseUp(e) {
       var flattened = this.dots.flat();
       var finishDot = flattened.find(function (dot) {
         return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;
       });
-      this.handleClear();
-    } // where does game logic happen? aka. adding points to score?
-    // points are sum of chainedDots
-
+      this.score.score += this.chainedDots.length;
+      this.handleClear(finishDot);
+    }
   }, {
     key: "handleClear",
-    value: function handleClear() {
+    value: function handleClear(finishDot) {
       if (this.chainedDots.length > 1) {
-        this.clearDotsFromBoard();
+        this.clearDotsFromBoard(finishDot);
         this.dropDownRemainingDots();
         this.fillGapsWithNewDots();
-        this.score.score += this.chainedDots.length;
-        this.draw(this.ctx);
-        this.draw(this.ctx2);
       }
 
-      this.clearSelectionRiffRaff();
+      this.clearLine();
     }
   }, {
     key: "dropDownRemainingDots",
@@ -400,10 +403,12 @@ function () {
     }
   }, {
     key: "clearDotsFromBoard",
-    value: function clearDotsFromBoard() {
+    value: function clearDotsFromBoard(finishDot) {
       var _this = this;
 
-      // console.log(this.chainedDots);
+      console.log(this.startDot === finishDot); // if ((this.startDot === finishDot) &&
+      //     ()
+
       this.chainedDots.forEach(function (dot) {
         dot.markForRemoval();
       });
@@ -433,8 +438,8 @@ function () {
       });
     }
   }, {
-    key: "passDownToDot",
-    value: function passDownToDot(e) {
+    key: "handleMouseDown",
+    value: function handleMouseDown(e) {
       console.log(e.offsetX, e.offsetY);
       var flattened = this.dots.flat();
       var startDot = flattened.find(function (dot) {
@@ -471,6 +476,7 @@ function () {
     key: "drawLine",
     value: function drawLine(e) {
       if (this.line) {
+        this.cleared = false;
         this.ctx2.clearRect(0, 0, 480, 640);
         this.ctx2.strokeStyle = this.startDot.color;
         this.ctx2.lineWidth = 5;
@@ -481,8 +487,8 @@ function () {
       }
     }
   }, {
-    key: "clearSelectionRiffRaff",
-    value: function clearSelectionRiffRaff() {
+    key: "clearLine",
+    value: function clearLine() {
       this.ctx2.clearRect(0, 0, 480, 640);
     }
   }, {
@@ -521,9 +527,11 @@ function () {
   }, {
     key: "draw",
     value: function draw(ctx) {
+      var _this3 = this;
+
       this.dots.forEach(function (row) {
         row.forEach(function (dot) {
-          dot.draw(ctx);
+          dot.draw(ctx, _this3.ctx2);
         });
       });
     }

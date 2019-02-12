@@ -53,6 +53,8 @@ class Dot {
       img.onload = () => {
         if (this.active) {
           this.drawHalo(ctx);
+        } else {
+          this.clearHalo(ctx);
         }
         ctx.beginPath();
         ctx.drawImage(
@@ -96,6 +98,10 @@ class Dot {
     ctx.fillStyle = this.color;
     ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
     ctx.fill();
+  }
+
+  clearHalo(ctx){
+    ctx.clearRect(this.x - 12.5, this.y-12.5, 45, 45);
   }
 }
     export default Dot;
