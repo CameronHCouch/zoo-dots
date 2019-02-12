@@ -45,6 +45,7 @@ class Grid {
       this.dropDownRemainingDots();
       this.fillGapsWithNewDots();
     }
+    this.startDot.active = false;
     this.clearLine();
   }
 
@@ -69,6 +70,7 @@ class Grid {
     }
   }
 
+  //TODO: remove all dots of a species when a square is made
   clearDotsFromBoard(finishDot) {
     console.log(this.startDot === finishDot);
     // if ((this.startDot === finishDot) &&
@@ -150,6 +152,7 @@ class Grid {
   }
 
   connectDots(e) {
+    this.drawLine(e);    
     let flattened = this.dots.flat();
     let neighborDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))

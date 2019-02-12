@@ -77,16 +77,9 @@ class Dot {
     
   drawHalo(ctx){
     this.color = this.speciesColor(this.species)
-    // rgba colors increase in opacity each time grid is re-rendered
-    // need to clear board each time?
     ctx.beginPath();
-    ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.6)';
-    ctx.arc(this.x + 12.5, this.y + 12.5, 19, 0, 2 * Math.PI);
-    ctx.fill();
-    
-    ctx.beginPath();
-    ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.7)';
-    ctx.arc(this.x + 12.5, this.y + 12.5, 17.75, 0, 2 * Math.PI);
+    ctx.fillStyle = this.color;
+    ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
     ctx.fill();
     
     ctx.beginPath();
@@ -95,8 +88,13 @@ class Dot {
     ctx.fill();
     
     ctx.beginPath();
-    ctx.fillStyle = this.color;
-    ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
+    ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.7)';
+    ctx.arc(this.x + 12.5, this.y + 12.5, 17.75, 0, 2 * Math.PI);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.6)';
+    ctx.arc(this.x + 12.5, this.y + 12.5, 19, 0, 2 * Math.PI);
     ctx.fill();
   }
 

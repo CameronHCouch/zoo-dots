@@ -190,24 +190,22 @@ function () {
   }, {
     key: "drawHalo",
     value: function drawHalo(ctx) {
-      this.color = this.speciesColor(this.species); // rgba colors increase in opacity each time grid is re-rendered
-      // need to clear board each time?
-
+      this.color = this.speciesColor(this.species);
       ctx.beginPath();
-      ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.6)';
-      ctx.arc(this.x + 12.5, this.y + 12.5, 19, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.7)';
-      ctx.arc(this.x + 12.5, this.y + 12.5, 17.75, 0, 2 * Math.PI);
+      ctx.fillStyle = this.color;
+      ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
       ctx.fill();
       ctx.beginPath();
       ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.8)';
       ctx.arc(this.x + 12.5, this.y + 12.5, 16.5, 0, 2 * Math.PI);
       ctx.fill();
       ctx.beginPath();
-      ctx.fillStyle = this.color;
-      ctx.arc(this.x + 12.5, this.y + 12.5, 14, 0, 2 * Math.PI);
+      ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.7)';
+      ctx.arc(this.x + 12.5, this.y + 12.5, 17.75, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = this.color.slice(0, this.color.length - 2) + '0.6)';
+      ctx.arc(this.x + 12.5, this.y + 12.5, 19, 0, 2 * Math.PI);
       ctx.fill();
     }
   }, {
@@ -284,7 +282,6 @@ function () {
     key: "mouseMoveHandler",
     value: function mouseMoveHandler(e) {
       if (this.handleMouseMove) {
-        this.grid.drawLine(e);
         this.grid.connectDots(e);
       }
     }
@@ -376,6 +373,7 @@ function () {
         this.fillGapsWithNewDots();
       }
 
+      this.startDot.active = false;
       this.clearLine();
     }
   }, {
@@ -400,7 +398,8 @@ function () {
           });
         });
       }
-    }
+    } //TODO: remove all dots of a species when a square is made
+
   }, {
     key: "clearDotsFromBoard",
     value: function clearDotsFromBoard(finishDot) {
@@ -494,6 +493,7 @@ function () {
   }, {
     key: "connectDots",
     value: function connectDots(e) {
+      this.drawLine(e);
       var flattened = this.dots.flat();
       var neighborDot = flattened.find(function (dot) {
         return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;

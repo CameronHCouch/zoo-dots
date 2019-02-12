@@ -31,7 +31,6 @@ class GameBoard {
 
   mouseMoveHandler(e) {
     if (this.handleMouseMove) {
-      this.grid.drawLine(e);
       this.grid.connectDots(e);
     }
   }
