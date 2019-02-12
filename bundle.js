@@ -245,9 +245,9 @@ function () {
   function GameBoard(ctx, ctx2) {
     _classCallCheck(this, GameBoard);
 
-    this.grid = new _grid__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2);
     this.timer = new _timer__WEBPACK_IMPORTED_MODULE_1__["default"]();
     this.score = new _score__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    this.grid = new _grid__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2, this.score);
     this.ctx = ctx;
     this.handleMouseMove = false;
   }
@@ -255,12 +255,9 @@ function () {
   _createClass(GameBoard, [{
     key: "draw",
     value: function draw() {
-      this.timer.draw(this.ctx);
-      this.score.draw(this.ctx);
-      this.grid.draw(this.ctx); // if (counter <= 1) {
-      //   counter++;
-      // requestAnimationFrame(draw);
-      // }
+      setInterval(this.grid.draw.bind(this.grid, this.ctx), 1000);
+      setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
+      setInterval(this.score.draw.bind(this.score, this.ctx), 1000);
     }
   }, {
     key: "mouseDownHandler",
@@ -322,7 +319,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Grid =
 /*#__PURE__*/
 function () {
-  function Grid(ctx, ctx2) {
+  function Grid(ctx, ctx2, score) {
     _classCallCheck(this, Grid);
 
     this.ctx = ctx;
@@ -331,6 +328,7 @@ function () {
     this.cols = 6;
     this.dots = [];
     this.addDots();
+    this.score = score;
     this.line = false;
     this.lineStartX = '';
     this.lineStartY = '';
@@ -370,9 +368,12 @@ function () {
         this.clearDotsFromBoard();
         this.dropDownRemainingDots();
         this.fillGapsWithNewDots();
+        this.score.score += this.chainedDots.length;
         this.draw(this.ctx);
         this.draw(this.ctx2);
       }
+
+      this.clearSelectionRiffRaff();
     }
   }, {
     key: "dropDownRemainingDots",
@@ -478,17 +479,19 @@ function () {
         this.ctx2.lineTo(this.lineStartX, this.lineStartY);
         this.ctx2.stroke();
       }
-    } //TODO: ensure dot is neighboring last neighbor when chaining neighbors
-
+    }
+  }, {
+    key: "clearSelectionRiffRaff",
+    value: function clearSelectionRiffRaff() {
+      this.ctx2.clearRect(0, 0, 480, 640);
+    }
   }, {
     key: "connectDots",
     value: function connectDots(e) {
       var flattened = this.dots.flat();
       var neighborDot = flattened.find(function (dot) {
         return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;
-      }); // console.log('my neighbor is: ')
-      // console.log(neighborDot);
-
+      });
       console.log(this.chainedDots);
 
       if (neighborDot.species === this.startDot.species && !this.chainedDots.includes(neighborDot) && this.validMove(neighborDot)) {
@@ -612,6 +615,7 @@ function () {
   _createClass(Score, [{
     key: "draw",
     value: function draw(ctx) {
+      ctx.clearRect(295, 5, 150, 60);
       ctx.font = "30px Open Sans";
       ctx.fillStyle = 'black';
       ctx.fillText("Score " + this.score, 300, 50);
@@ -646,22 +650,24 @@ function () {
   function Timer() {
     _classCallCheck(this, Timer);
 
-    this.time = 60;
+    this.start = Date.now();
+    this.current = 60;
   }
 
   _createClass(Timer, [{
     key: "draw",
     value: function draw(ctx) {
+      ctx.clearRect(5, 5, 200, 50);
       ctx.font = "30px Open Sans";
       ctx.fillStyle = 'black';
-      ctx.fillText("Time " + this.time, 75, 50);
-      var cancel = setInterval(this.countDown.bind(this), 1000);
+      ctx.fillText("Time " + this.current, 75, 50);
+      this.countDown();
     }
   }, {
     key: "countDown",
     value: function countDown() {
-      if (this.time > 0) {
-        this.time -= 1;
+      if (this.current > 0) {
+        this.current = 60 - Math.floor((Date.now() - this.start) / 1000);
       }
     }
   }]);
@@ -669,8 +675,7 @@ function () {
   return Timer;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (Timer); //TO DO: update timer properly;
-// call this.draw again?
+/* harmony default export */ __webpack_exports__["default"] = (Timer);
 
 /***/ })
 

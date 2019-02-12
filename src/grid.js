@@ -1,13 +1,15 @@
 import Dot from './dot';
 
 class Grid {
-  constructor(ctx, ctx2) {
+  constructor(ctx, ctx2, score) {
     this.ctx = ctx;
     this.ctx2 = ctx2;
     this.rows = 6;
     this.cols = 6;
     this.dots = [];
     this.addDots();
+
+    this.score = score
 
     this.line = false;
     this.lineStartX = '';
@@ -43,9 +45,11 @@ class Grid {
       this.clearDotsFromBoard();
       this.dropDownRemainingDots();
       this.fillGapsWithNewDots();
+      this.score.score += this.chainedDots.length;
       this.draw(this.ctx);
       this.draw(this.ctx2);
     }
+    this.clearSelectionRiffRaff();
   }
 
   dropDownRemainingDots() {
@@ -141,16 +145,15 @@ class Grid {
     }
   }
 
-  //TODO: ensure dot is neighboring last neighbor when chaining neighbors
+  clearSelectionRiffRaff(){
+    this.ctx2.clearRect(0, 0, 480, 640);
+  }
 
   connectDots(e) {
     let flattened = this.dots.flat();
     let neighborDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
     });
-
-    // console.log('my neighbor is: ')
-    // console.log(neighborDot);
     console.log(this.chainedDots);
 
     if ((neighborDot.species === this.startDot.species) &&

@@ -4,21 +4,17 @@ import Score from './score';
 
 class GameBoard {
   constructor(ctx, ctx2) {
-    this.grid = new Grid(ctx, ctx2);
     this.timer = new Timer();
     this.score = new Score();
+    this.grid = new Grid(ctx, ctx2, this.score);
     this.ctx = ctx;
     this.handleMouseMove = false;
   }
 
   draw() {
-    this.timer.draw(this.ctx);
-    this.score.draw(this.ctx);
-    this.grid.draw(this.ctx);
-    // if (counter <= 1) {
-    //   counter++;
-    // requestAnimationFrame(draw);
-    // }
+    setInterval(this.grid.draw.bind(this.grid, this.ctx), 1000);
+    setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
+    setInterval(this.score.draw.bind(this.score, this.ctx), 1000);
   }
 
   mouseDownHandler(e) {
