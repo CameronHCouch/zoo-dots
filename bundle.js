@@ -211,7 +211,7 @@ function () {
   }, {
     key: "clearHalo",
     value: function clearHalo(ctx) {
-      ctx.clearRect(this.x - 12.5, this.y - 12.5, 45, 45);
+      ctx.clearRect(this.x - 12.5, this.y - 12.5, 55, 55);
     }
   }]);
 
@@ -332,13 +332,13 @@ function () {
     this.cols = 6;
     this.dots = [];
     this.addDots();
+    this.chainedDots = [];
     this.score = score;
     this.line = false;
     this.lineStartX = '';
     this.lineStartY = '';
     this.startDot = '';
     this.cleared = true;
-    this.chainedDots = [];
   }
 
   _createClass(Grid, [{
@@ -361,7 +361,6 @@ function () {
       var finishDot = flattened.find(function (dot) {
         return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;
       });
-      this.score.score += this.chainedDots.length;
       this.handleClear(finishDot);
     }
   }, {
@@ -374,8 +373,10 @@ function () {
       }
 
       this.startDot.active = false;
+      this.startDot = '';
       this.clearLine();
-    }
+    } //a.k.a. bubble sort
+
   }, {
     key: "dropDownRemainingDots",
     value: function dropDownRemainingDots() {
@@ -398,19 +399,35 @@ function () {
           });
         });
       }
-    } //TODO: remove all dots of a species when a square is made
+    }
+  }, {
+    key: "removeAllDotsOfSpecies",
+    value: function removeAllDotsOfSpecies(species) {
+      var _this = this;
 
+      this.dots.forEach(function (row) {
+        row.forEach(function (dot) {
+          if (dot.species === species) {
+            dot.markForRemoval();
+            _this.score.score += 1;
+          }
+        });
+      });
+    }
   }, {
     key: "clearDotsFromBoard",
     value: function clearDotsFromBoard(finishDot) {
-      var _this = this;
+      var _this2 = this;
 
-      console.log(this.startDot === finishDot); // if ((this.startDot === finishDot) &&
-      //     ()
+      if (this.startDot === finishDot && this.chainedDots.length >= 4 && this.validMove(finishDot)) {
+        this.removeAllDotsOfSpecies(finishDot.species);
+      } else {
+        this.chainedDots.forEach(function (dot) {
+          dot.markForRemoval();
+          _this2.score.score += 1;
+        });
+      }
 
-      this.chainedDots.forEach(function (dot) {
-        dot.markForRemoval();
-      });
       this.dots.forEach(function (row) {
         row.forEach(function (dot) {
           if (dot.destroy) {
@@ -418,7 +435,7 @@ function () {
                 x = _dot$pos[0],
                 y = _dot$pos[1];
 
-            _this.dots[x][y] = new _dot__WEBPACK_IMPORTED_MODULE_0__["default"](dot.pos, "sentinel");
+            _this2.dots[x][y] = new _dot__WEBPACK_IMPORTED_MODULE_0__["default"](dot.pos, "sentinel");
           }
         });
       });
@@ -426,12 +443,12 @@ function () {
   }, {
     key: "fillGapsWithNewDots",
     value: function fillGapsWithNewDots() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.dots.forEach(function (row, idx1) {
         row.forEach(function (dot, idx2) {
           if (dot.species === 'sentinel') {
-            _this2.dots[idx1][idx2] = new _dot__WEBPACK_IMPORTED_MODULE_0__["default"]([idx1, idx2]);
+            _this3.dots[idx1][idx2] = new _dot__WEBPACK_IMPORTED_MODULE_0__["default"]([idx1, idx2]);
           }
         });
       });
@@ -439,7 +456,6 @@ function () {
   }, {
     key: "handleMouseDown",
     value: function handleMouseDown(e) {
-      console.log(e.offsetX, e.offsetY);
       var flattened = this.dots.flat();
       var startDot = flattened.find(function (dot) {
         return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;
@@ -452,10 +468,7 @@ function () {
         this.draw(this.ctx);
       }
 
-      ; // snap line to center of selected Dot
-
-      this.lineStartX = this.startDot.x + 12.5;
-      this.lineStartY = this.startDot.y + 12.5;
+      ;
     }
   }, {
     key: "toggleLineDrawing",
@@ -478,17 +491,37 @@ function () {
         this.cleared = false;
         this.ctx2.clearRect(0, 0, 480, 640);
         this.ctx2.strokeStyle = this.startDot.color;
-        this.ctx2.lineWidth = 5;
+        this.ctx2.lineWidth = 3;
+        var lastEl = this.chainedDots[this.chainedDots.length - 1];
+        this.lineStartX = lastEl.x + 12.5;
+        this.lineStartY = lastEl.y + 12.5;
         this.ctx2.beginPath();
-        this.ctx2.moveTo(e.offsetX, e.offsetY);
-        this.ctx2.lineTo(this.lineStartX, this.lineStartY);
+        this.ctx2.moveTo(this.lineStartX, this.lineStartY);
+        this.ctx2.lineTo(e.offsetX, e.offsetY);
         this.ctx2.stroke();
+        this.ctx.strokeStyle = 'rgba(255,255,255,0)';
       }
     }
   }, {
     key: "clearLine",
     value: function clearLine() {
       this.ctx2.clearRect(0, 0, 480, 640);
+    }
+  }, {
+    key: "drawConnection",
+    value: function drawConnection() {
+      var prevEl = this.chainedDots[this.chainedDots.length - 2];
+      var lineStartX = prevEl.x + 12.5;
+      var lineStartY = prevEl.y + 12.5;
+      var lastEl = this.chainedDots[this.chainedDots.length - 1];
+      var lineEndX = lastEl.x + 12.5;
+      var lineEndY = lastEl.y + 12.5;
+      this.ctx.strokeStyle = this.startDot.color;
+      this.ctx.lineWidth = 3;
+      this.ctx.beginPath();
+      this.ctx.moveTo(lineStartX, lineStartY);
+      this.ctx.lineTo(lineEndX, lineEndY);
+      this.ctx.stroke();
     }
   }, {
     key: "connectDots",
@@ -498,11 +531,11 @@ function () {
       var neighborDot = flattened.find(function (dot) {
         return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;
       });
-      console.log(this.chainedDots);
 
       if (neighborDot.species === this.startDot.species && !this.chainedDots.includes(neighborDot) && this.validMove(neighborDot)) {
         neighborDot.activate();
         this.chainedDots.push(neighborDot);
+        this.drawConnection();
       }
 
       this.draw(this.ctx);
@@ -527,11 +560,9 @@ function () {
   }, {
     key: "draw",
     value: function draw(ctx) {
-      var _this3 = this;
-
       this.dots.forEach(function (row) {
         row.forEach(function (dot) {
-          dot.draw(ctx, _this3.ctx2);
+          dot.draw(ctx);
         });
       });
     }

@@ -6,8 +6,10 @@ class Grid {
     this.ctx2 = ctx2;
     this.rows = 6;
     this.cols = 6;
+
     this.dots = [];
     this.addDots();
+    this.chainedDots = [];
 
     this.score = score
 
@@ -17,7 +19,6 @@ class Grid {
     this.startDot = '';
     this.cleared = true;
 
-    this.chainedDots = [];
   }
 
   addDots(){
@@ -35,7 +36,6 @@ class Grid {
     let finishDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28));
     })
-    this.score.score += this.chainedDots.length;
     this.handleClear(finishDot);
   }
 
@@ -46,9 +46,11 @@ class Grid {
       this.fillGapsWithNewDots();
     }
     this.startDot.active = false;
+    this.startDot = '';
     this.clearLine();
   }
 
+  //a.k.a. bubble sort
   dropDownRemainingDots() {
     let sortable = true;
     while (sortable) {
@@ -70,16 +72,31 @@ class Grid {
     }
   }
 
-  //TODO: remove all dots of a species when a square is made
+  removeAllDotsOfSpecies(species){
+    this.dots.forEach((row) => {
+      row.forEach((dot) => {
+        if (dot.species === species) {
+          dot.markForRemoval();
+          this.score.score +=1
+        }
+      });
+    });
+  }
+
   clearDotsFromBoard(finishDot) {
-    console.log(this.startDot === finishDot);
-    // if ((this.startDot === finishDot) &&
-    //     ()
+    if ((this.startDot === finishDot) &&
+        (this.chainedDots.length >= 4) &&
+        (this.validMove(finishDot))){
+          this.removeAllDotsOfSpecies(finishDot.species)
+    } else {
 
 
-    this.chainedDots.forEach((dot) => {
-      dot.markForRemoval();
-    })
+      this.chainedDots.forEach((dot) => {
+        dot.markForRemoval();
+        this.score.score += 1
+      })
+    }
+
     this.dots.forEach((row) => {
       row.forEach((dot) => {
         if (dot.destroy) {
@@ -101,7 +118,6 @@ class Grid {
   }
 
   handleMouseDown(e){
-    console.log(e.offsetX, e.offsetY);
     let flattened = this.dots.flat();
     let startDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
@@ -113,10 +129,6 @@ class Grid {
       this.chainedDots.push(startDot);
       this.draw(this.ctx);
     };
-
-    // snap line to center of selected Dot
-    this.lineStartX = this.startDot.x + 12.5;
-    this.lineStartY = this.startDot.y + 12.5;
   }
 
 
@@ -138,12 +150,17 @@ class Grid {
       this.cleared = false;
       this.ctx2.clearRect(0,0,480,640);
       this.ctx2.strokeStyle = this.startDot.color;
-      this.ctx2.lineWidth = 5;
+      this.ctx2.lineWidth = 3;
+
+      let lastEl = this.chainedDots[this.chainedDots.length - 1];
+      this.lineStartX = lastEl.x + 12.5;
+      this.lineStartY = lastEl.y + 12.5;
 
       this.ctx2.beginPath();
-      this.ctx2.moveTo(e.offsetX, e.offsetY);
-      this.ctx2.lineTo(this.lineStartX, this.lineStartY);
+      this.ctx2.moveTo(this.lineStartX, this.lineStartY);
+      this.ctx2.lineTo(e.offsetX, e.offsetY);
       this.ctx2.stroke();
+      this.ctx.strokeStyle = 'rgba(255,255,255,0)'
     }
   }
 
@@ -151,13 +168,31 @@ class Grid {
     this.ctx2.clearRect(0, 0, 480, 640);
   }
 
+  drawConnection(){
+    let prevEl = this.chainedDots[this.chainedDots.length - 2];
+    let lineStartX = prevEl.x + 12.5;
+    let lineStartY = prevEl.y + 12.5;
+
+    let lastEl = this.chainedDots[this.chainedDots.length - 1];
+    let lineEndX = lastEl.x + 12.5;
+    let lineEndY = lastEl.y + 12.5;
+
+    this.ctx.strokeStyle = this.startDot.color;
+    this.ctx.lineWidth = 3;
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(lineStartX, lineStartY);
+    this.ctx.lineTo(lineEndX, lineEndY);
+    this.ctx.stroke();
+  }
+
   connectDots(e) {
-    this.drawLine(e);    
+    this.drawLine(e); 
+
     let flattened = this.dots.flat();
     let neighborDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
     });
-    console.log(this.chainedDots);
 
     if ((neighborDot.species === this.startDot.species) &&
        (!this.chainedDots.includes(neighborDot)) &&
@@ -165,8 +200,9 @@ class Grid {
        ){
       neighborDot.activate();
       this.chainedDots.push(neighborDot);
-    }
 
+      this.drawConnection();
+    }
     this.draw(this.ctx);
   }
 
@@ -189,7 +225,7 @@ class Grid {
   draw(ctx) {
     this.dots.forEach((row) => {
       row.forEach((dot) => {
-        dot.draw(ctx, this.ctx2);
+        dot.draw(ctx);
       })
     })
   }

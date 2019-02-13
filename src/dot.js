@@ -99,7 +99,7 @@ class Dot {
   }
 
   clearHalo(ctx){
-    ctx.clearRect(this.x - 12.5, this.y-12.5, 45, 45);
+    ctx.clearRect(this.x - 12.5, this.y-12.5, 55, 55);
   }
 }
     export default Dot;
