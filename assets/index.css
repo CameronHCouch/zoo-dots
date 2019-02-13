@@ -3,7 +3,7 @@ html, body, figure, figcaption, ul, li, h1 {
   margin: 0;
   padding: 0;
   border: 0;
-  font: inherit;
+  font-family: 'Open Sans', sans-serif;
   text-align: inherit;
   box-sizing: border-box;
 }
@@ -19,13 +19,23 @@ body{
 h1{
   font-size: 50px;
   font-weight: 600;
-  font-family: 'Open Sans', sans-serif;
 }
 
 header{
   display: flex;
   justify-content: center;
   align-items: baseline;
+}
+
+section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+div{
+  display: block;
+  position: relative;
 }
 
 nav{
@@ -66,5 +76,5 @@ nav a{
 .center {
   margin: auto;
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+  top: 0; left: 0; bottom: 500; right: 0;
 }
