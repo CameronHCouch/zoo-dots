@@ -12,7 +12,7 @@ class GameBoard {
   }
 
   draw() {
-    setInterval(this.grid.draw.bind(this.grid, this.ctx), 1000);
+    setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
     setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
     setInterval(this.score.draw.bind(this.score, this.ctx), 1000);
   }

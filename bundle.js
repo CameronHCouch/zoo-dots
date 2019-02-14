@@ -222,6 +222,49 @@ function () {
 
 /***/ }),
 
+/***/ "./src/game.js":
+/*!*********************!*\
+  !*** ./src/game.js ***!
+  \*********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Game = function Game(board, ctx) {
+  _classCallCheck(this, Game);
+
+  this.board = board;
+  this.ctx = ctx;
+  this.handleMouseMove = false;
+} // draw() {
+//   setInterval(this.grid.draw.bind(this.grid, this.ctx), 1000);
+//   setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
+//   setInterval(this.score.draw.bind(this.score, this.ctx), 1000);
+// }
+// mouseDownHandler(e) {
+//   this.grid.handleMouseDown(e);
+//   this.grid.toggleLineDrawing('on');
+//   this.handleMouseMove = true;
+// }
+// mouseUpHandler(e) {
+//   this.grid.handleMouseUp(e);
+//   this.grid.toggleLineDrawing('off');
+//   this.handleMouseMove = false;
+// }
+// mouseMoveHandler(e) {
+//   if (this.handleMouseMove) {
+//     this.grid.connectDots(e);
+//   }
+// }
+;
+
+/* harmony default export */ __webpack_exports__["default"] = (Game);
+
+/***/ }),
+
 /***/ "./src/game_board.js":
 /*!***************************!*\
   !*** ./src/game_board.js ***!
@@ -260,7 +303,7 @@ function () {
   _createClass(GameBoard, [{
     key: "draw",
     value: function draw() {
-      setInterval(this.grid.draw.bind(this.grid, this.ctx), 1000);
+      setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
       setInterval(this.score.draw.bind(this.score, this.ctx), 1000);
     }
@@ -587,6 +630,8 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game_board__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game_board */ "./src/game_board.js");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./src/game.js");
+
 
 document.addEventListener("DOMContentLoaded", function () {
   var canvas = document.getElementById("zoo-canvas");
@@ -598,6 +643,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var ctx = canvas.getContext('2d');
   var ctx2 = canvas2.getContext('2d');
   var board = new _game_board__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2);
+  var game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"](board, ctx);
 
   function draw(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
