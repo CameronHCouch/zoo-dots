@@ -133,6 +133,11 @@ function () {
       this.active = true;
     }
   }, {
+    key: "deactivate",
+    value: function deactivate() {
+      this.active = false;
+    }
+  }, {
     key: "markForRemoval",
     value: function markForRemoval() {
       this.active = false;
@@ -513,6 +518,13 @@ function () {
   }, {
     key: "handleMouseUp",
     value: function handleMouseUp(e) {
+      console.log(this.chainedDots);
+
+      if (this.chainedDots.length == 1) {
+        var soloDot = this.chainedDots.pop();
+        soloDot.deactivate();
+      }
+
       var flattened = this.dots.flat();
       var finishDot = flattened.find(function (dot) {
         return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;
@@ -526,10 +538,9 @@ function () {
         this.clearDotsFromBoard(finishDot);
         this.dropDownRemainingDots();
         this.fillGapsWithNewDots();
+        console.log(this.startDot);
       }
 
-      if (this.startDot) this.startDot.destroy = true;
-      this.startDot = '';
       this.clearLine();
     } //a.k.a. bubble sort
 
@@ -690,6 +701,22 @@ function () {
         neighborDot.activate();
         this.chainedDots.push(neighborDot);
         this.drawConnection();
+      }
+
+      if (neighborDot === this.chainedDots[this.chainedDots.length - 2]) {
+        this.deselectDot(neighborDot);
+
+        if (this.chainedDots.length === 1) {
+          this.deselectDot(this.chainedDots[0]);
+        }
+      }
+    }
+  }, {
+    key: "deselectDot",
+    value: function deselectDot(neighbor) {
+      if (this.chainedDots.length > 1) {
+        neighbor.deactivate();
+        this.chainedDots.pop();
       }
     }
   }, {

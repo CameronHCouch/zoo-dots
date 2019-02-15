@@ -30,6 +30,11 @@ class Grid {
   }
 
   handleMouseUp(e){
+    console.log(this.chainedDots);
+    if (this.chainedDots.length == 1) {
+      let soloDot = this.chainedDots.pop();
+      soloDot.deactivate();
+    }
     let flattened = this.dots.flat();
     let finishDot = flattened.find((dot) => {
       return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <=28));
@@ -42,9 +47,8 @@ class Grid {
       this.clearDotsFromBoard(finishDot);
       this.dropDownRemainingDots();
       this.fillGapsWithNewDots();
+      console.log(this.startDot);
     }
-    if (this.startDot) this.startDot.destroy = true;
-    this.startDot = '';
     this.clearLine();
   }
 
@@ -198,6 +202,21 @@ class Grid {
       this.chainedDots.push(neighborDot);
       this.drawConnection();
     }
+
+    if ((neighborDot === this.chainedDots[this.chainedDots.length-2])){
+      this.deselectDot(neighborDot);
+      if (this.chainedDots.length === 1) {
+        this.deselectDot(this.chainedDots[0]);
+      }
+    }
+  }
+
+  deselectDot(neighbor){
+    if (this.chainedDots.length > 1) {
+      neighbor.deactivate();
+      this.chainedDots.pop();
+    }
+
   }
 
   validMove(neighbor){

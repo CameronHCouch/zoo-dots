@@ -24,6 +24,10 @@ class Dot {
     this.active = true;
   }
 
+  deactivate() {
+    this.active = false;
+  }
+
   markForRemoval() {
     this.active = false;
     this.destroy = true;
