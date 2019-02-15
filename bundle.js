@@ -704,6 +704,7 @@ function () {
       }
 
       if (neighborDot === this.chainedDots[this.chainedDots.length - 2]) {
+        this.deselectDot(this.chainedDots[this.chainedDots.length - 1]);
         this.deselectDot(neighborDot);
 
         if (this.chainedDots.length === 1) {
