@@ -18,9 +18,6 @@ class GameBoard {
       // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
   }
 
-  // x 100, 385
-  // y 170, 455
-
   validRange(e){
     return Boolean((e.offsetX >= 100) &&
       (e.offsetX <= 385) &&
