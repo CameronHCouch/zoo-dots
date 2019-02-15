@@ -259,10 +259,13 @@ function () {
     key: "loadBackgroundMusic",
     value: function loadBackgroundMusic() {
       this.bgMusic = new Audio('./assets/sound/zoo_tycoon_theme.mp3');
+      this.bgMusic.loop = true;
     }
   }, {
-    key: "startGame",
-    value: function startGame() {
+    key: "start",
+    value: function start() {
+      this.gameOver = false;
+      this.interval = setInterval(this.draw.bind(this), 100);
       this.loadBackgroundMusic();
     }
   }, {
@@ -272,18 +275,12 @@ function () {
 
       document.addEventListener("click", function (e) {
         if (_this.muteClicked(e)) {
-          console.log('you clicked right?');
-
           if (!_this.soundMuted) {
-            console.log('pausing');
-
             _this.toggleSound();
 
             _this.bgMusic.pause();
           } else if (_this.soundMuted) {
             _this.toggleSound();
-
-            console.log('starting');
 
             _this.bgMusic.play();
           }
@@ -294,7 +291,6 @@ function () {
     key: "toggleSound",
     value: function toggleSound() {
       this.soundMuted = !this.soundMuted;
-      console.log(this.soundMuted);
     }
   }, {
     key: "muteClicked",
@@ -326,13 +322,29 @@ function () {
       ;
     }
   }, {
-    key: "gameOver",
-    value: function gameOver() {}
+    key: "gameOverListener",
+    //figure out game end logic x.x
+    // endGame(){
+    //   this.gameOver = true;
+    //   clearInterval(this.interval);
+    //   this.drawGameOver();
+    //   console.log("game over for you")
+    //   console.log(this.gameOver)
+    // }
+    value: function gameOverListener() {
+      if (this.board.timer.time == 0) this.endGame();
+    }
+  }, {
+    key: "drawGameOver",
+    value: function drawGameOver() {
+      this.ctx.clearRect(0, 0, 480, 640);
+    }
   }, {
     key: "draw",
     value: function draw() {
-      setInterval(this.drawSoundButton.bind(this, this.ctx, this.board.ctx2), 1000);
+      this.drawSoundButton(this.ctx);
       this.board.draw();
+      this.gameOverListener(this);
     } // mouseDownHandler(e) {
     //   this.grid.handleMouseDown(e);
     //   this.grid.toggleLineDrawing('on');
@@ -396,18 +408,24 @@ function () {
   _createClass(GameBoard, [{
     key: "draw",
     value: function draw() {
-      setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
-      setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-      setInterval(this.score.draw.bind(this.score, this.ctx), 750);
+      var int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
+      var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
+      var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
+      if (this.timer.time <= 0) clearInterval(int1, int2, int3);
     } // x 100, 385
     // y 170, 455
 
+  }, {
+    key: "validRange",
+    value: function validRange(e) {
+      return Boolean(e.offsetX >= 100 && e.offsetX <= 385 && e.offsetY >= 170 && e.offsetY <= 455);
+    }
   }, {
     key: "mouseDownHandler",
     value: function mouseDownHandler(e) {
       this.grid.handleMouseDown(e);
       this.grid.toggleLineDrawing('on');
-      this.handleMouseMove = true;
+      if (this.validRange(e)) this.handleMouseMove = true;
     }
   }, {
     key: "mouseUpHandler",
@@ -510,7 +528,7 @@ function () {
         this.fillGapsWithNewDots();
       }
 
-      this.startDot.active = false;
+      if (this.startDot) this.startDot.active = false;
       this.startDot = '';
       this.clearLine();
     } //a.k.a. bubble sort
@@ -630,7 +648,7 @@ function () {
         this.ctx2.clearRect(0, 0, 480, 640);
         this.ctx2.strokeStyle = this.startDot.color;
         this.ctx2.lineWidth = 3;
-        var lastEl = this.chainedDots[this.chainedDots.length - 1];
+        var lastEl = this.chainedDots[this.chainedDots.length - 1] || this.startDot;
         this.lineStartX = lastEl.x + 12.5;
         this.lineStartY = lastEl.y + 12.5;
         this.ctx2.beginPath();
@@ -744,10 +762,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    game.draw(); // if (counter <= 1) {
-    //   counter++;
-    // requestAnimationFrame(draw);
-    // }
+    game.start();
   }
 
   canvas.addEventListener("mousedown", board.mouseDownHandler.bind(board), false);
@@ -831,7 +846,7 @@ function () {
     _classCallCheck(this, Timer);
 
     this.start = Date.now();
-    this.current = 60;
+    this.time = 5;
   }
 
   _createClass(Timer, [{
@@ -840,14 +855,14 @@ function () {
       ctx.clearRect(5, 5, 200, 50);
       ctx.font = "30px Open Sans";
       ctx.fillStyle = 'black';
-      ctx.fillText("Time " + this.current, 75, 50);
+      ctx.fillText("Time " + this.time, 75, 50);
       this.countDown();
     }
   }, {
     key: "countDown",
     value: function countDown() {
-      if (this.current > 0) {
-        this.current = 60 - Math.floor((Date.now() - this.start) / 1000);
+      if (this.time > 0) {
+        this.time = 5 - Math.floor((Date.now() - this.start) / 1000);
       }
     }
   }]);

@@ -20,12 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    game.draw();
-
-    // if (counter <= 1) {
-    //   counter++;
-      // requestAnimationFrame(draw);
-    // }
+    game.start();
   }
   canvas.addEventListener("mousedown", board.mouseDownHandler.bind(board), false);
   canvas.addEventListener("mouseup", board.mouseUpHandler.bind(board), false);

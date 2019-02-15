@@ -45,7 +45,7 @@ class Grid {
       this.dropDownRemainingDots();
       this.fillGapsWithNewDots();
     }
-    this.startDot.active = false;
+    if (this.startDot) this.startDot.active = false;
     this.startDot = '';
     this.clearLine();
   }
@@ -152,7 +152,7 @@ class Grid {
       this.ctx2.strokeStyle = this.startDot.color;
       this.ctx2.lineWidth = 3;
 
-      let lastEl = this.chainedDots[this.chainedDots.length - 1];
+      let lastEl = this.chainedDots[this.chainedDots.length - 1] || this.startDot;
       this.lineStartX = lastEl.x + 12.5;
       this.lineStartY = lastEl.y + 12.5;
 

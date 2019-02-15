@@ -12,18 +12,26 @@ class GameBoard {
   }
 
   draw() {
-    setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
-    setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-    setInterval(this.score.draw.bind(this.score, this.ctx), 750);
+      let int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
+      let int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
+      let int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
+      if (this.timer.time <= 0) clearInterval(int1, int2, int3);
   }
 
   // x 100, 385
   // y 170, 455
 
+  validRange(e){
+    return Boolean((e.offsetX >= 100) &&
+      (e.offsetX <= 385) &&
+      (e.offsetY >= 170) &&
+      (e.offsetY <= 455))
+  }
+
   mouseDownHandler(e) {
     this.grid.handleMouseDown(e);
     this.grid.toggleLineDrawing('on');
-    this.handleMouseMove = true;
+    if (this.validRange(e)) this.handleMouseMove = true;
   }
   
   mouseUpHandler(e) {

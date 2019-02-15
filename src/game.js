@@ -2,11 +2,13 @@ class Game {
   constructor(board, ctx) {
     this.board = board;
     this.ctx = ctx;
+
     this.handleMouseMove = false;
     this.bgMusic = "";
     this.soundMuted = true;
     this.soundButtonX = 425;
     this.soundButtonY = 590;
+
     this.gameOver = false;
 
     this.loadBackgroundMusic();
@@ -15,23 +17,23 @@ class Game {
 
   loadBackgroundMusic() {
     this.bgMusic = new Audio('./assets/sound/zoo_tycoon_theme.mp3');
+    this.bgMusic.loop = true;
   };
 
-  startGame(){
+  start(){
+    this.gameOver = false;
+    this.interval = setInterval(this.draw.bind(this), 100);
     this.loadBackgroundMusic();
   }
 
   musicListener(){
     document.addEventListener("click", (e) => {
       if (this.muteClicked(e)){
-        console.log('you clicked right?')
         if (!this.soundMuted) {
-          console.log('pausing')
           this.toggleSound();
           this.bgMusic.pause();
         } else if (this.soundMuted) {
           this.toggleSound();
-          console.log('starting')
           this.bgMusic.play();
         }
       }
@@ -40,7 +42,6 @@ class Game {
 
   toggleSound(){
     this.soundMuted = !this.soundMuted;
-    console.log(this.soundMuted);
   }
 
   muteClicked(e){
@@ -66,15 +67,27 @@ class Game {
       img.src = `./assets/speaker-high-volume.png`;
     };
   };
+//figure out game end logic x.x
+  // endGame(){
+  //   this.gameOver = true;
+  //   clearInterval(this.interval);
+  //   this.drawGameOver();
+  //   console.log("game over for you")
+  //   console.log(this.gameOver)
+  // }
 
-  gameOver(){
-    
+  gameOverListener(){
+    if (this.board.timer.time == 0) this.endGame();
   }
   
-
+  drawGameOver(){
+    this.ctx.clearRect(0, 0, 480, 640);
+  }
+  
   draw() {
-    setInterval(this.drawSoundButton.bind(this, this.ctx, this.board.ctx2), 1000);
+    this.drawSoundButton(this.ctx);
     this.board.draw();
+    this.gameOverListener(this);
   }
 
   // mouseDownHandler(e) {
