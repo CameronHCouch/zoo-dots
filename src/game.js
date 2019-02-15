@@ -22,7 +22,7 @@ class Game {
 
   start(){
     this.gameOver = false;
-    this.interval = setInterval(this.draw.bind(this), 100);
+    this.interval = setInterval(this.draw.bind(this), 1000);
     this.loadBackgroundMusic();
   }
 
