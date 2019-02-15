@@ -22,7 +22,7 @@ class Game {
 
   start(){
     this.gameOver = false;
-    this.interval = setInterval(this.draw.bind(this), 1000);
+    this.draw();
     this.loadBackgroundMusic();
   }
 
@@ -42,6 +42,13 @@ class Game {
 
   toggleSound(){
     this.soundMuted = !this.soundMuted;
+    let imageSource;
+    if (this.soundMuted == true) {
+      imageSource = './assets/speaker-high-volume.png'
+    } else { 
+      imageSource= './assets/muted-speaker.png';
+    }
+    this.drawSoundButton(this.ctx, imageSource);
   }
 
   muteClicked(e){
@@ -51,22 +58,18 @@ class Game {
                    (e.offsetY - this.soundButtonY <= 25))
   }
 
-  drawSoundButton(ctx) {
+  drawSoundButton(ctx, imageSource) {
     let img = new Image(25, 25);
     img.onload = () => {
+      ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
       ctx.beginPath();
       ctx.drawImage(img,this.soundButtonX,this.soundButtonY,25,25);
       ctx.closePath();
       ctx.fill();
     }
-    if (this.soundMuted) {
-      ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
-      img.src = `./assets/muted-speaker.png`;
-    } else {
-      ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
-      img.src = `./assets/speaker-high-volume.png`;
-    };
-  };
+    img.src = imageSource;
+    }
+
 //figure out game end logic x.x
   // endGame(){
   //   this.gameOver = true;
@@ -85,7 +88,7 @@ class Game {
   }
   
   draw() {
-    this.drawSoundButton(this.ctx);
+    this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
     this.board.draw();
     this.gameOverListener(this);
   }

@@ -265,7 +265,7 @@ function () {
     key: "start",
     value: function start() {
       this.gameOver = false;
-      this.interval = setInterval(this.draw.bind(this), 100);
+      this.draw();
       this.loadBackgroundMusic();
     }
   }, {
@@ -291,6 +291,15 @@ function () {
     key: "toggleSound",
     value: function toggleSound() {
       this.soundMuted = !this.soundMuted;
+      var imageSource;
+
+      if (this.soundMuted == true) {
+        imageSource = './assets/speaker-high-volume.png';
+      } else {
+        imageSource = './assets/muted-speaker.png';
+      }
+
+      this.drawSoundButton(this.ctx, imageSource);
     }
   }, {
     key: "muteClicked",
@@ -299,31 +308,21 @@ function () {
     }
   }, {
     key: "drawSoundButton",
-    value: function drawSoundButton(ctx) {
+    value: function drawSoundButton(ctx, imageSource) {
       var _this2 = this;
 
       var img = new Image(25, 25);
 
       img.onload = function () {
+        ctx.clearRect(_this2.soundButtonX, _this2.soundButtonY, 25, 25);
         ctx.beginPath();
         ctx.drawImage(img, _this2.soundButtonX, _this2.soundButtonY, 25, 25);
         ctx.closePath();
         ctx.fill();
       };
 
-      if (this.soundMuted) {
-        ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
-        img.src = "./assets/muted-speaker.png";
-      } else {
-        ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
-        img.src = "./assets/speaker-high-volume.png";
-      }
-
-      ;
-    }
-  }, {
-    key: "gameOverListener",
-    //figure out game end logic x.x
+      img.src = imageSource;
+    } //figure out game end logic x.x
     // endGame(){
     //   this.gameOver = true;
     //   clearInterval(this.interval);
@@ -331,6 +330,9 @@ function () {
     //   console.log("game over for you")
     //   console.log(this.gameOver)
     // }
+
+  }, {
+    key: "gameOverListener",
     value: function gameOverListener() {
       if (this.board.timer.time == 0) this.endGame();
     }
@@ -342,7 +344,7 @@ function () {
   }, {
     key: "draw",
     value: function draw() {
-      this.drawSoundButton(this.ctx);
+      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
       this.board.draw();
       this.gameOverListener(this);
     } // mouseDownHandler(e) {
