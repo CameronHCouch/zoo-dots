@@ -14,8 +14,11 @@ class GameBoard {
   draw() {
     setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
     setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-    setInterval(this.score.draw.bind(this.score, this.ctx), 1000);
+    setInterval(this.score.draw.bind(this.score, this.ctx), 750);
   }
+
+  // x 100, 385
+  // y 170, 455
 
   mouseDownHandler(e) {
     this.grid.handleMouseDown(e);

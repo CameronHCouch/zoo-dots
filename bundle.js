@@ -233,33 +233,126 @@ function () {
 __webpack_require__.r(__webpack_exports__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Game = function Game(board, ctx) {
-  _classCallCheck(this, Game);
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  this.board = board;
-  this.ctx = ctx;
-  this.handleMouseMove = false;
-} // draw() {
-//   setInterval(this.grid.draw.bind(this.grid, this.ctx), 1000);
-//   setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-//   setInterval(this.score.draw.bind(this.score, this.ctx), 1000);
-// }
-// mouseDownHandler(e) {
-//   this.grid.handleMouseDown(e);
-//   this.grid.toggleLineDrawing('on');
-//   this.handleMouseMove = true;
-// }
-// mouseUpHandler(e) {
-//   this.grid.handleMouseUp(e);
-//   this.grid.toggleLineDrawing('off');
-//   this.handleMouseMove = false;
-// }
-// mouseMoveHandler(e) {
-//   if (this.handleMouseMove) {
-//     this.grid.connectDots(e);
-//   }
-// }
-;
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Game =
+/*#__PURE__*/
+function () {
+  function Game(board, ctx) {
+    _classCallCheck(this, Game);
+
+    this.board = board;
+    this.ctx = ctx;
+    this.handleMouseMove = false;
+    this.bgMusic = "";
+    this.soundMuted = true;
+    this.soundButtonX = 425;
+    this.soundButtonY = 590;
+    this.gameOver = false;
+    this.loadBackgroundMusic();
+    this.musicListener();
+  }
+
+  _createClass(Game, [{
+    key: "loadBackgroundMusic",
+    value: function loadBackgroundMusic() {
+      this.bgMusic = new Audio('./assets/sound/zoo_tycoon_theme.mp3');
+    }
+  }, {
+    key: "startGame",
+    value: function startGame() {
+      this.loadBackgroundMusic();
+    }
+  }, {
+    key: "musicListener",
+    value: function musicListener() {
+      var _this = this;
+
+      document.addEventListener("click", function (e) {
+        if (_this.muteClicked(e)) {
+          console.log('you clicked right?');
+
+          if (!_this.soundMuted) {
+            console.log('pausing');
+
+            _this.toggleSound();
+
+            _this.bgMusic.pause();
+          } else if (_this.soundMuted) {
+            _this.toggleSound();
+
+            console.log('starting');
+
+            _this.bgMusic.play();
+          }
+        }
+      });
+    }
+  }, {
+    key: "toggleSound",
+    value: function toggleSound() {
+      this.soundMuted = !this.soundMuted;
+      console.log(this.soundMuted);
+    }
+  }, {
+    key: "muteClicked",
+    value: function muteClicked(e) {
+      return Boolean(e.offsetX - this.soundButtonX <= 25 && e.offsetX - this.soundButtonX >= 0 && e.offsetY - this.soundButtonY >= 0 && e.offsetY - this.soundButtonY <= 25);
+    }
+  }, {
+    key: "drawSoundButton",
+    value: function drawSoundButton(ctx) {
+      var _this2 = this;
+
+      var img = new Image(25, 25);
+
+      img.onload = function () {
+        ctx.beginPath();
+        ctx.drawImage(img, _this2.soundButtonX, _this2.soundButtonY, 25, 25);
+        ctx.closePath();
+        ctx.fill();
+      };
+
+      if (this.soundMuted) {
+        ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
+        img.src = "./assets/muted-speaker.png";
+      } else {
+        ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
+        img.src = "./assets/speaker-high-volume.png";
+      }
+
+      ;
+    }
+  }, {
+    key: "gameOver",
+    value: function gameOver() {}
+  }, {
+    key: "draw",
+    value: function draw() {
+      setInterval(this.drawSoundButton.bind(this, this.ctx, this.board.ctx2), 1000);
+      this.board.draw();
+    } // mouseDownHandler(e) {
+    //   this.grid.handleMouseDown(e);
+    //   this.grid.toggleLineDrawing('on');
+    //   this.handleMouseMove = true;
+    // }
+    // mouseUpHandler(e) {
+    //   this.grid.handleMouseUp(e);
+    //   this.grid.toggleLineDrawing('off');
+    //   this.handleMouseMove = false;
+    // }
+    // mouseMoveHandler(e) {
+    //   if (this.handleMouseMove) {
+    //     this.grid.connectDots(e);
+    //   }
+    // }
+
+  }]);
+
+  return Game;
+}();
 
 /* harmony default export */ __webpack_exports__["default"] = (Game);
 
@@ -305,8 +398,10 @@ function () {
     value: function draw() {
       setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-      setInterval(this.score.draw.bind(this.score, this.ctx), 1000);
-    }
+      setInterval(this.score.draw.bind(this.score, this.ctx), 750);
+    } // x 100, 385
+    // y 170, 455
+
   }, {
     key: "mouseDownHandler",
     value: function mouseDownHandler(e) {
@@ -649,7 +744,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    board.draw(); // if (counter <= 1) {
+    game.draw(); // if (counter <= 1) {
     //   counter++;
     // requestAnimationFrame(draw);
     // }

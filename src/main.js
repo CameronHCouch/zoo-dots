@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    board.draw();
+    game.draw();
 
     // if (counter <= 1) {
     //   counter++;
