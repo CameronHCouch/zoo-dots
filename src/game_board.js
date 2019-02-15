@@ -15,7 +15,7 @@ class GameBoard {
       let int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       let int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
       let int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
-      if (this.timer.time <= 0) clearInterval(int1, int2, int3);
+      // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
   }
 
   // x 100, 385

@@ -412,8 +412,7 @@ function () {
     value: function draw() {
       var int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-      var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
-      if (this.timer.time <= 0) clearInterval(int1, int2, int3);
+      var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750); // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
     } // x 100, 385
     // y 170, 455
 
@@ -496,7 +495,6 @@ function () {
     this.lineStartX = '';
     this.lineStartY = '';
     this.startDot = '';
-    this.cleared = true;
   }
 
   _createClass(Grid, [{
@@ -530,7 +528,7 @@ function () {
         this.fillGapsWithNewDots();
       }
 
-      if (this.startDot) this.startDot.active = false;
+      if (this.startDot) this.startDot.destroy = true;
       this.startDot = '';
       this.clearLine();
     } //a.k.a. bubble sort
@@ -646,9 +644,7 @@ function () {
     key: "drawLine",
     value: function drawLine(e) {
       if (this.line) {
-        this.cleared = false;
-        this.ctx2.clearRect(0, 0, 480, 640);
-        this.ctx2.strokeStyle = this.startDot.color;
+        this.clearLine();
         this.ctx2.lineWidth = 3;
         var lastEl = this.chainedDots[this.chainedDots.length - 1] || this.startDot;
         this.lineStartX = lastEl.x + 12.5;
@@ -657,7 +653,7 @@ function () {
         this.ctx2.moveTo(this.lineStartX, this.lineStartY);
         this.ctx2.lineTo(e.offsetX, e.offsetY);
         this.ctx2.stroke();
-        this.ctx.strokeStyle = 'rgba(255,255,255,0)';
+        this.ctx2.strokeStyle = lastEl.color;
       }
     }
   }, {
@@ -668,13 +664,13 @@ function () {
   }, {
     key: "drawConnection",
     value: function drawConnection() {
-      var prevEl = this.chainedDots[this.chainedDots.length - 2];
+      var prevEl = this.chainedDots[this.chainedDots.length - 2] || this.startDot;
       var lineStartX = prevEl.x + 12.5;
       var lineStartY = prevEl.y + 12.5;
       var lastEl = this.chainedDots[this.chainedDots.length - 1];
       var lineEndX = lastEl.x + 12.5;
       var lineEndY = lastEl.y + 12.5;
-      this.ctx.strokeStyle = this.startDot.color;
+      this.ctx.strokeStyle = prevEl.color;
       this.ctx.lineWidth = 3;
       this.ctx.beginPath();
       this.ctx.moveTo(lineStartX, lineStartY);
@@ -687,7 +683,7 @@ function () {
       this.drawLine(e);
       var flattened = this.dots.flat();
       var neighborDot = flattened.find(function (dot) {
-        return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;
+        return e.offsetX - dot.x <= 25 && e.offsetY - dot.y <= 25;
       });
 
       if (neighborDot.species === this.startDot.species && !this.chainedDots.includes(neighborDot) && this.validMove(neighborDot)) {
@@ -695,8 +691,6 @@ function () {
         this.chainedDots.push(neighborDot);
         this.drawConnection();
       }
-
-      this.draw(this.ctx);
     }
   }, {
     key: "validMove",
@@ -707,7 +701,7 @@ function () {
           row = _lastSelected$pos[0],
           col = _lastSelected$pos[1];
 
-      var validMoves = [[row, col - 1].join(','), [row, col + 1].join(','), [row + 1, col].join(','), [row - 1, col].join(',')];
+      var validMoves = [[row, col - 1].join(','), [row, col + 1].join(','), [row + 1, col].join(','), [row - 1, col].join(',')]; // array checking in JS is tricky, so convert to string
 
       if (validMoves.includes(neighbor.pos.join(','))) {
         return true;
@@ -729,9 +723,7 @@ function () {
   return Grid;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (Grid); // [0,0] = 105..130, 175..200  [1,0] = 155..180,175..200
-// [1,0] = 105..130, 225..250
-// give each one x and y range of -25, I spose
+/* harmony default export */ __webpack_exports__["default"] = (Grid);
 
 /***/ }),
 

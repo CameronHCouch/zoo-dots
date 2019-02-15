@@ -17,8 +17,6 @@ class Grid {
     this.lineStartX = '';
     this.lineStartY = '';
     this.startDot = '';
-    this.cleared = true;
-
   }
 
   addDots(){
@@ -45,7 +43,7 @@ class Grid {
       this.dropDownRemainingDots();
       this.fillGapsWithNewDots();
     }
-    if (this.startDot) this.startDot.active = false;
+    if (this.startDot) this.startDot.destroy = true;
     this.startDot = '';
     this.clearLine();
   }
@@ -147,9 +145,7 @@ class Grid {
   
   drawLine(e) {
     if (this.line) {
-      this.cleared = false;
-      this.ctx2.clearRect(0,0,480,640);
-      this.ctx2.strokeStyle = this.startDot.color;
+      this.clearLine();
       this.ctx2.lineWidth = 3;
 
       let lastEl = this.chainedDots[this.chainedDots.length - 1] || this.startDot;
@@ -160,7 +156,7 @@ class Grid {
       this.ctx2.moveTo(this.lineStartX, this.lineStartY);
       this.ctx2.lineTo(e.offsetX, e.offsetY);
       this.ctx2.stroke();
-      this.ctx.strokeStyle = 'rgba(255,255,255,0)'
+      this.ctx2.strokeStyle = lastEl.color;
     }
   }
 
@@ -169,15 +165,15 @@ class Grid {
   }
 
   drawConnection(){
-    let prevEl = this.chainedDots[this.chainedDots.length - 2];
+    let prevEl = this.chainedDots[this.chainedDots.length - 2] || this.startDot;
     let lineStartX = prevEl.x + 12.5;
     let lineStartY = prevEl.y + 12.5;
-
+    
     let lastEl = this.chainedDots[this.chainedDots.length - 1];
     let lineEndX = lastEl.x + 12.5;
     let lineEndY = lastEl.y + 12.5;
 
-    this.ctx.strokeStyle = this.startDot.color;
+    this.ctx.strokeStyle = prevEl.color;
     this.ctx.lineWidth = 3;
 
     this.ctx.beginPath();
@@ -191,7 +187,7 @@ class Grid {
 
     let flattened = this.dots.flat();
     let neighborDot = flattened.find((dot) => {
-      return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
+      return ((e.offsetX - dot.x <= 25) && (e.offsetY - dot.y <= 25))
     });
 
     if ((neighborDot.species === this.startDot.species) &&
@@ -200,10 +196,8 @@ class Grid {
        ){
       neighborDot.activate();
       this.chainedDots.push(neighborDot);
-
       this.drawConnection();
     }
-    this.draw(this.ctx);
   }
 
   validMove(neighbor){
@@ -215,7 +209,7 @@ class Grid {
       [row+1, col].join(','),
       [row-1, col].join(',')
     ];
-
+    // array checking in JS is tricky, so convert to string
     if (validMoves.includes(neighbor.pos.join(','))){ 
       return true ;
     }
@@ -232,9 +226,3 @@ class Grid {
 }
 
 export default Grid;
-
-
-// [0,0] = 105..130, 175..200  [1,0] = 155..180,175..200
-// [1,0] = 105..130, 225..250
-
-// give each one x and y range of -25, I spose
