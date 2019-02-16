@@ -22,10 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
     game.draw();
   }
-  canvas.addEventListener("mousedown", board.mouseDownHandler.bind(board), false);
-  canvas.addEventListener("mouseup", board.mouseUpHandler.bind(board), false);
-  canvas.addEventListener("mousemove", board.mouseMoveHandler.bind(board), false);
-
+  
   requestAnimationFrame(() => draw(ctx));
 
 })

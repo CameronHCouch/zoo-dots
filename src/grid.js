@@ -122,7 +122,10 @@ class Grid {
   handleMouseDown(e){
     let flattened = this.dots.flat();
     let startDot = flattened.find((dot) => {
-      return ((e.offsetX - dot.x <= 28) && (e.offsetY - dot.y <= 28))
+      return ((e.offsetX - dot.x <= 28) && 
+              (e.offsetX - dot.x >= 0) &&
+              (e.offsetY - dot.y <= 28) && 
+              (e.offsetY - dot.y >= 0))
     });
 
     if (startDot) {

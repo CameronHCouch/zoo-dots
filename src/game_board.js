@@ -12,10 +12,15 @@ class GameBoard {
   }
 
   draw() {
-      let int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
-      let int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-      let int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
-      // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
+    let canvas = document.getElementById("zoo-canvas");
+    canvas.addEventListener("mousedown", this.mouseDownHandler.bind(this), false);
+    canvas.addEventListener("mouseup", this.mouseUpHandler.bind(this), false);
+    canvas.addEventListener("mousemove", this.mouseMoveHandler.bind(this), false);
+    
+    let int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
+    let int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
+    let int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
+    // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
   }
 
   validRange(e){

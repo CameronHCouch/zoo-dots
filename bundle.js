@@ -401,6 +401,10 @@ function () {
   _createClass(GameBoard, [{
     key: "draw",
     value: function draw() {
+      var canvas = document.getElementById("zoo-canvas");
+      canvas.addEventListener("mousedown", this.mouseDownHandler.bind(this), false);
+      canvas.addEventListener("mouseup", this.mouseUpHandler.bind(this), false);
+      canvas.addEventListener("mousemove", this.mouseMoveHandler.bind(this), false);
       var int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
       var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750); // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
@@ -608,7 +612,7 @@ function () {
     value: function handleMouseDown(e) {
       var flattened = this.dots.flat();
       var startDot = flattened.find(function (dot) {
-        return e.offsetX - dot.x <= 28 && e.offsetY - dot.y <= 28;
+        return e.offsetX - dot.x <= 28 && e.offsetX - dot.x >= 0 && e.offsetY - dot.y <= 28 && e.offsetY - dot.y >= 0;
       });
 
       if (startDot) {
@@ -834,9 +838,6 @@ document.addEventListener("DOMContentLoaded", function () {
     game.draw();
   }
 
-  canvas.addEventListener("mousedown", board.mouseDownHandler.bind(board), false);
-  canvas.addEventListener("mouseup", board.mouseUpHandler.bind(board), false);
-  canvas.addEventListener("mousemove", board.mouseMoveHandler.bind(board), false);
   requestAnimationFrame(function () {
     return draw(ctx);
   });
