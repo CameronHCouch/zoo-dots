@@ -256,6 +256,7 @@ function () {
     this.soundButtonX = 425;
     this.soundButtonY = 590;
     this.gameOver = false;
+    this.gameOngoing = false;
     this.loadBackgroundMusic();
     this.musicListener();
   }
@@ -350,7 +351,12 @@ function () {
     key: "draw",
     value: function draw() {
       this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
-      this.board.draw();
+      this.intro_outro.draw();
+
+      if (this.gameOngoing == true) {
+        this.board.draw();
+      }
+
       this.gameOverListener(this);
     } // mouseDownHandler(e) {
     //   this.grid.handleMouseDown(e);

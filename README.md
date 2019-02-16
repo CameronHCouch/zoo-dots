@@ -10,16 +10,16 @@ Infinite games run until the board is out of moves.
 ## Functionality and MVP
 In this game, players will:
 - [ ] Choose a game mode (infinite and timed)
-- [ ] Toggle sound
-- [ ] Click and drag to select 2+ neighbors
-- [ ] Undo a selected by reversing the path their mouse traced
-- [ ] Remove all animals of a given species when a square is made
-- [ ] See their final score when the game is over
+- [x] Toggle sound
+- [x] Click and drag to select 2+ neighbors
+- [x] Undo a selection by reversing the path their mouse traced
+- [x] Remove all animals of a given species when a square is made
+- [x] See their final score when the game is over
 - [ ] See their top score
 - [ ] Play Again or Return to Home Screen
 
 Additional MVPs:
-- [ ] Concise tutorial text for new players
+- [x] Concise tutorial text for new players
 - [ ] A production README
 
 ## Technologies, Libraries, APIs

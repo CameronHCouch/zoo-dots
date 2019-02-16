@@ -10,6 +10,7 @@ class Game {
     this.soundButtonY = 590;
 
     this.gameOver = false;
+    this.gameOngoing = false;
 
     this.loadBackgroundMusic();
     this.musicListener();
@@ -20,15 +21,15 @@ class Game {
     this.bgMusic.loop = true;
   };
 
-  start(){
+  start() {
     this.gameOver = false;
     this.draw();
     this.loadBackgroundMusic();
   }
 
-  musicListener(){
+  musicListener() {
     document.addEventListener("click", (e) => {
-      if (this.muteClicked(e)){
+      if (this.muteClicked(e)) {
         if (!this.soundMuted) {
           this.toggleSound();
           this.bgMusic.pause();
@@ -40,22 +41,22 @@ class Game {
     });
   }
 
-  toggleSound(){
+  toggleSound() {
     this.soundMuted = !this.soundMuted;
     let imageSource;
     if (this.soundMuted == true) {
       imageSource = './assets/speaker-high-volume.png'
-    } else { 
-      imageSource= './assets/muted-speaker.png';
+    } else {
+      imageSource = './assets/muted-speaker.png';
     }
     this.drawSoundButton(this.ctx, imageSource);
   }
 
-  muteClicked(e){
-    return Boolean((e.offsetX - this.soundButtonX <= 25) && 
-                   (e.offsetX - this.soundButtonX >= 0) && 
-                   (e.offsetY - this.soundButtonY >= 0) && 
-                   (e.offsetY - this.soundButtonY <= 25))
+  muteClicked(e) {
+    return Boolean((e.offsetX - this.soundButtonX <= 25) &&
+      (e.offsetX - this.soundButtonX >= 0) &&
+      (e.offsetY - this.soundButtonY >= 0) &&
+      (e.offsetY - this.soundButtonY <= 25))
   }
 
   drawSoundButton(ctx, imageSource) {
@@ -63,14 +64,14 @@ class Game {
     img.onload = () => {
       ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
       ctx.beginPath();
-      ctx.drawImage(img,this.soundButtonX,this.soundButtonY,25,25);
+      ctx.drawImage(img, this.soundButtonX, this.soundButtonY, 25, 25);
       ctx.closePath();
       ctx.fill();
     }
     img.src = imageSource;
-    }
+  }
 
-//figure out game end logic x.x
+  //figure out game end logic x.x
   // endGame(){
   //   this.gameOver = true;
   //   clearInterval(this.interval);
@@ -79,17 +80,22 @@ class Game {
   //   console.log(this.gameOver)
   // }
 
-  gameOverListener(){
+  gameOverListener() {
     if (this.board.timer.time == 0) this.endGame();
   }
-  
-  drawGameOver(){
+
+  drawGameOver() {
     this.ctx.clearRect(0, 0, 480, 640);
   }
-  
+
   draw() {
     this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
-    this.board.draw();
+
+    this.intro_outro.draw();
+
+    if (this.gameOngoing == true) {
+      this.board.draw();
+    }
     this.gameOverListener(this);
   }
 
