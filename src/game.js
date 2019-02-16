@@ -1,3 +1,6 @@
+
+import IntroOutro from './intro_outro';
+
 class Game {
   constructor(board, ctx) {
     this.board = board;
@@ -9,8 +12,10 @@ class Game {
     this.soundButtonX = 425;
     this.soundButtonY = 590;
 
-    this.gameOver = false;
+    this.gameOver = true;
     this.gameOngoing = false;
+
+    this.introOutro = new IntroOutro(ctx);
 
     this.loadBackgroundMusic();
     this.musicListener();
@@ -63,6 +68,8 @@ class Game {
     let img = new Image(25, 25);
     img.onload = () => {
       ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
+      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.fillRect(this.soundButtonX, this.soundButtonY, 25, 25);
       ctx.beginPath();
       ctx.drawImage(img, this.soundButtonX, this.soundButtonY, 25, 25);
       ctx.closePath();
@@ -71,51 +78,25 @@ class Game {
     img.src = imageSource;
   }
 
-  //figure out game end logic x.x
-  // endGame(){
-  //   this.gameOver = true;
-  //   clearInterval(this.interval);
-  //   this.drawGameOver();
-  //   console.log("game over for you")
-  //   console.log(this.gameOver)
-  // }
-
   gameOverListener() {
     if (this.board.timer.time == 0) this.endGame();
-  }
-
-  drawGameOver() {
-    this.ctx.clearRect(0, 0, 480, 640);
   }
 
   draw() {
     this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
 
-    this.intro_outro.draw();
+    // if (this.gameOver && !this.gameOngoing) {
+    //   this.introOutro.drawIntro();
+    // }
 
-    if (this.gameOngoing == true) {
+    if (!this.gameOngoing) {
+      this.ctx.clearRect(1, 1, 478, 638);
       this.board.draw();
     }
+
     this.gameOverListener(this);
   }
 
-  // mouseDownHandler(e) {
-  //   this.grid.handleMouseDown(e);
-  //   this.grid.toggleLineDrawing('on');
-  //   this.handleMouseMove = true;
-  // }
-
-  // mouseUpHandler(e) {
-  //   this.grid.handleMouseUp(e);
-  //   this.grid.toggleLineDrawing('off');
-  //   this.handleMouseMove = false;
-  // }
-
-  // mouseMoveHandler(e) {
-  //   if (this.handleMouseMove) {
-  //     this.grid.connectDots(e);
-  //   }
-  // }
 }
 
 export default Game;

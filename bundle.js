@@ -236,11 +236,14 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _intro_outro__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./intro_outro */ "./src/intro_outro.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
 
 var Game =
 /*#__PURE__*/
@@ -255,8 +258,9 @@ function () {
     this.soundMuted = true;
     this.soundButtonX = 425;
     this.soundButtonY = 590;
-    this.gameOver = false;
+    this.gameOver = true;
     this.gameOngoing = false;
+    this.introOutro = new _intro_outro__WEBPACK_IMPORTED_MODULE_0__["default"](ctx);
     this.loadBackgroundMusic();
     this.musicListener();
   }
@@ -321,6 +325,8 @@ function () {
 
       img.onload = function () {
         ctx.clearRect(_this2.soundButtonX, _this2.soundButtonY, 25, 25);
+        ctx.fillStyle = "rgba(255,255,255,0.3)";
+        ctx.fillRect(_this2.soundButtonX, _this2.soundButtonY, 25, 25);
         ctx.beginPath();
         ctx.drawImage(img, _this2.soundButtonX, _this2.soundButtonY, 25, 25);
         ctx.closePath();
@@ -328,52 +334,26 @@ function () {
       };
 
       img.src = imageSource;
-    } //figure out game end logic x.x
-    // endGame(){
-    //   this.gameOver = true;
-    //   clearInterval(this.interval);
-    //   this.drawGameOver();
-    //   console.log("game over for you")
-    //   console.log(this.gameOver)
-    // }
-
+    }
   }, {
     key: "gameOverListener",
     value: function gameOverListener() {
       if (this.board.timer.time == 0) this.endGame();
     }
   }, {
-    key: "drawGameOver",
-    value: function drawGameOver() {
-      this.ctx.clearRect(0, 0, 480, 640);
-    }
-  }, {
     key: "draw",
     value: function draw() {
-      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
-      this.intro_outro.draw();
+      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png'); // if (this.gameOver && !this.gameOngoing) {
+      //   this.introOutro.drawIntro();
+      // }
 
-      if (this.gameOngoing == true) {
+      if (!this.gameOngoing) {
+        this.ctx.clearRect(1, 1, 478, 638);
         this.board.draw();
       }
 
       this.gameOverListener(this);
-    } // mouseDownHandler(e) {
-    //   this.grid.handleMouseDown(e);
-    //   this.grid.toggleLineDrawing('on');
-    //   this.handleMouseMove = true;
-    // }
-    // mouseUpHandler(e) {
-    //   this.grid.handleMouseUp(e);
-    //   this.grid.toggleLineDrawing('off');
-    //   this.handleMouseMove = false;
-    // }
-    // mouseMoveHandler(e) {
-    //   if (this.handleMouseMove) {
-    //     this.grid.connectDots(e);
-    //   }
-    // }
-
+    }
   }]);
 
   return Game;
@@ -522,8 +502,7 @@ function () {
   }, {
     key: "handleMouseUp",
     value: function handleMouseUp(e) {
-      console.log(this.chainedDots);
-
+      // console.log(this.chainedDots);
       if (this.chainedDots.length == 1) {
         var soloDot = this.chainedDots.pop();
         soloDot.deactivate();
@@ -759,6 +738,70 @@ function () {
 
 /***/ }),
 
+/***/ "./src/intro_outro.js":
+/*!****************************!*\
+  !*** ./src/intro_outro.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var IntroOutro =
+/*#__PURE__*/
+function () {
+  function IntroOutro(ctx) {
+    _classCallCheck(this, IntroOutro);
+
+    this.ctx = ctx;
+    this.highscore = '';
+  }
+
+  _createClass(IntroOutro, [{
+    key: "drawIntro",
+    value: function drawIntro() {
+      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.fillStyle = "rgba(255,255,255,0.3)";
+      this.ctx.fillRect(1, 1, 478, 638);
+      this.ctx.font = "30px Open Sans";
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText("Zoooooooo Dots!", 150, 50);
+    }
+  }, {
+    key: "drawGameOver",
+    value: function drawGameOver() {
+      this.ctx.clearRect(0, 0, 480, 640);
+    } // mouseDownHandler(e) {
+    //   this.grid.handleMouseDown(e);
+    //   this.grid.toggleLineDrawing('on');
+    //   this.handleMouseMove = true;
+    // }
+    // mouseUpHandler(e) {
+    //   this.grid.handleMouseUp(e);
+    //   this.grid.toggleLineDrawing('off');
+    //   this.handleMouseMove = false;
+    // }
+    // mouseMoveHandler(e) {
+    //   if (this.handleMouseMove) {
+    //     this.grid.connectDots(e);
+    //   }
+    // }
+
+  }]);
+
+  return IntroOutro;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (IntroOutro);
+
+/***/ }),
+
 /***/ "./src/main.js":
 /*!*********************!*\
   !*** ./src/main.js ***!
@@ -788,24 +831,16 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    game.start();
+    game.draw();
   }
 
   canvas.addEventListener("mousedown", board.mouseDownHandler.bind(board), false);
   canvas.addEventListener("mouseup", board.mouseUpHandler.bind(board), false);
   canvas.addEventListener("mousemove", board.mouseMoveHandler.bind(board), false);
-  draw(ctx);
-}); // Workflow: define dimensions and properties of a thing
-// Use canvas to draw the thing
-// Add event listeners for user input
-// pressed buttons or clicked items can be initialized with booleans
-// Write fn for how to handle user input
-// 
-// KeyUp and KeyDown are listening for key press and key release (not whether someone is pressing up and down)
-// call draw() fn at bottom of class
-// within draw() definition, call requestAnimationFrame(draw);
-//TODO
-// fix countdown timer
+  requestAnimationFrame(function () {
+    return draw(ctx);
+  });
+});
 
 /***/ }),
 

@@ -20,28 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    game.start();
+    game.draw();
   }
   canvas.addEventListener("mousedown", board.mouseDownHandler.bind(board), false);
   canvas.addEventListener("mouseup", board.mouseUpHandler.bind(board), false);
   canvas.addEventListener("mousemove", board.mouseMoveHandler.bind(board), false);
 
-  draw(ctx);
+  requestAnimationFrame(() => draw(ctx));
 
 })
-
-// Workflow: define dimensions and properties of a thing
-// Use canvas to draw the thing
-// Add event listeners for user input
-  // pressed buttons or clicked items can be initialized with booleans
-// Write fn for how to handle user input
-// 
-
-// KeyUp and KeyDown are listening for key press and key release (not whether someone is pressing up and down)
-
-// call draw() fn at bottom of class
-// within draw() definition, call requestAnimationFrame(draw);
-
-//TODO
-
-// fix countdown timer

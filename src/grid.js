@@ -30,7 +30,7 @@ class Grid {
   }
 
   handleMouseUp(e){
-    console.log(this.chainedDots);
+    // console.log(this.chainedDots);
     if (this.chainedDots.length == 1) {
       let soloDot = this.chainedDots.pop();
       soloDot.deactivate();
