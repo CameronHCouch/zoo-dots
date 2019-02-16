@@ -418,9 +418,7 @@ function () {
       var int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
       var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750); // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
-    } // x 100, 385
-    // y 170, 455
-
+    }
   }, {
     key: "validRange",
     value: function validRange(e) {
@@ -868,7 +866,7 @@ function () {
     _classCallCheck(this, Timer);
 
     this.start = Date.now();
-    this.time = 5;
+    this.time = 60;
   }
 
   _createClass(Timer, [{
@@ -884,7 +882,7 @@ function () {
     key: "countDown",
     value: function countDown() {
       if (this.time > 0) {
-        this.time = 5 - Math.floor((Date.now() - this.start) / 1000);
+        this.time = 60 - Math.floor((Date.now() - this.start) / 1000);
       }
     }
   }]);
