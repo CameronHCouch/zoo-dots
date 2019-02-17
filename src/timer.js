@@ -2,8 +2,8 @@
 class Timer {
   constructor(){
     this.start = Date.now();
-    this.time = 10;
-    this.startTime = 10;
+    this.time = 60;
+    this.startTime = 60;
   }
 
   draw(ctx) {
@@ -21,8 +21,8 @@ class Timer {
   }
 
   reset() {
-    this.startTime = 10;
-    this.time = 10;
+    this.startTime = 60;
+    this.time = 60;
   }
 }
 export default Timer;
