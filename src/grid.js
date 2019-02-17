@@ -30,7 +30,6 @@ class Grid {
   }
 
   handleMouseUp(e){
-    // console.log(this.chainedDots);
     if (this.chainedDots.length == 1) {
       let soloDot = this.chainedDots.pop();
       soloDot.deactivate();
@@ -47,7 +46,6 @@ class Grid {
       this.clearDotsFromBoard(finishDot);
       this.dropDownRemainingDots();
       this.fillGapsWithNewDots();
-      console.log(this.startDot);
     }
     this.clearLine();
   }

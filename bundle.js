@@ -280,7 +280,7 @@ function () {
       this.board = new _game_board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.ctx2);
       this.introOutro.game = this;
       this.draw();
-      this.loadBackgroundMusic();
+      if (!this.bgMusic) this.loadBackgroundMusic();
     }
   }, {
     key: "musicListener",
@@ -343,8 +343,6 @@ function () {
   }, {
     key: "gameOverListener",
     value: function gameOverListener() {
-      console.log(this.introOutro.beginGame);
-
       if (this.board.timer.time == 0) {
         clearInterval(this.gameOverListenerInt);
         this.board.timer.reset();
@@ -549,7 +547,6 @@ function () {
   }, {
     key: "handleMouseUp",
     value: function handleMouseUp(e) {
-      // console.log(this.chainedDots);
       if (this.chainedDots.length == 1) {
         var soloDot = this.chainedDots.pop();
         soloDot.deactivate();
@@ -568,7 +565,6 @@ function () {
         this.clearDotsFromBoard(finishDot);
         this.dropDownRemainingDots();
         this.fillGapsWithNewDots();
-        console.log(this.startDot);
       }
 
       this.clearLine();
@@ -819,7 +815,6 @@ function () {
   _createClass(IntroOutro, [{
     key: "drawIntro",
     value: function drawIntro() {
-      console.log('drawIntro');
       this.canvas.addEventListener("click", this.selectGameMode, false);
       this.canvas.addEventListener("mousemove", this.hoverDescription, false);
       this.ctx.clearRect(1, 1, 478, 638);
@@ -847,9 +842,7 @@ function () {
       };
 
       img.src = "./assets/five-oclock.png";
-    } //Y 301, 400
-    //X 193, 292
-
+    }
   }, {
     key: "selectGameMode",
     value: function selectGameMode(e) {
@@ -864,7 +857,6 @@ function () {
         this.ctx.fill();
         this.beginGame = true;
         this.ctx.clearRect(1, 1, 478, 638);
-        console.log('selected');
         this.canvas.removeEventListener("click", this.selectGameMode);
         this.canvas.removeEventListener("mousemove", this.hoverDescription);
       }
@@ -881,7 +873,7 @@ function () {
         _this.ctx.fill();
       };
 
-      img.src = "./assets/five-oclock.png"; //get rid of intro-outro listeners
+      img.src = "./assets/five-oclock.png";
     }
   }, {
     key: "hoverDescription",
@@ -956,21 +948,21 @@ function () {
     key: "handleOutroClick",
     value: function handleOutroClick(e) {
       e.preventDefault();
-      console.log(e.offsetX, e.offsetY);
 
       if (e.offsetX >= 155 && e.offsetX <= 240 && e.offsetY >= 342 && e.offsetY <= 421) {
         this.beginGame = true;
-        this.ctx.clearRect(1, 1, 478, 638);
         this.canvas.removeEventListener("click", this.handleOutroClick);
         this.canvas.removeEventListener("mousemove", this.handleOutroHover);
+        this.ctx.clearRect(1, 1, 478, 638);
+        this.game.gameOver = false;
         this.game.start();
       }
 
       if (e.offsetX >= 247 && e.offsetX <= 325 && e.offsetY >= 342 && e.offsetY <= 421) {
         this.beginGame = false;
-        this.ctx.clearRect(1, 1, 478, 638);
         this.canvas.removeEventListener("click", this.handleOutroClick);
         this.canvas.removeEventListener("mousemove", this.handleOutroHover);
+        this.ctx.clearRect(1, 1, 478, 638);
         this.game.start();
       }
     }

@@ -33,7 +33,7 @@ class Game {
     this.introOutro.game = this;
 
     this.draw();
-    this.loadBackgroundMusic();
+    if (!this.bgMusic) this.loadBackgroundMusic();
   }
 
   musicListener() {
@@ -84,7 +84,6 @@ class Game {
   }
 
   gameOverListener() {
-    console.log(this.introOutro.beginGame)
     if (this.board.timer.time == 0) {
       clearInterval(this.gameOverListenerInt);
       this.board.timer.reset();

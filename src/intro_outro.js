@@ -12,7 +12,6 @@ class IntroOutro {
   }
 
   drawIntro() {
-    console.log('drawIntro')
     this.canvas.addEventListener("click", this.selectGameMode, false);
     this.canvas.addEventListener("mousemove", this.hoverDescription, false);
 
@@ -49,9 +48,6 @@ class IntroOutro {
       img.src = `./assets/five-oclock.png`;
   }
 
-  //Y 301, 400
-  //X 193, 292
-
   selectGameMode(e){
     e.preventDefault();
     if ((e.offsetX >= 193) && (e.offsetX <= 292) && (e.offsetY >= 301) && (e.offsetY <= 400)) {
@@ -62,7 +58,6 @@ class IntroOutro {
       
       this.beginGame = true;
       this.ctx.clearRect(1, 1, 478, 638);
-      console.log('selected')
       this.canvas.removeEventListener("click", this.selectGameMode);
       this.canvas.removeEventListener("mousemove", this.hoverDescription);
     }
@@ -81,8 +76,6 @@ class IntroOutro {
       this.ctx.fill();
     }
     img.src = `./assets/five-oclock.png`;
-
-    //get rid of intro-outro listeners
   }
 
   hoverDescription(e){
@@ -159,20 +152,20 @@ class IntroOutro {
 
   handleOutroClick(e) {
     e.preventDefault();
-    console.log(e.offsetX, e.offsetY)
     if ((e.offsetX >= 155) && (e.offsetX <= 240) && (e.offsetY >= 342) && (e.offsetY <= 421)) {
       this.beginGame = true;
-      this.ctx.clearRect(1, 1, 478, 638);
       this.canvas.removeEventListener("click", this.handleOutroClick);
       this.canvas.removeEventListener("mousemove", this.handleOutroHover);
+      this.ctx.clearRect(1, 1, 478, 638);
+      this.game.gameOver = false;
       this.game.start();
     }
 
     if ((e.offsetX >= 247) && (e.offsetX <= 325) && (e.offsetY >= 342) && (e.offsetY <= 421)) {
       this.beginGame = false;
-      this.ctx.clearRect(1, 1, 478, 638);
       this.canvas.removeEventListener("click", this.handleOutroClick);
       this.canvas.removeEventListener("mousemove", this.handleOutroHover);
+      this.ctx.clearRect(1, 1, 478, 638);
       this.game.start();
     }
   }
