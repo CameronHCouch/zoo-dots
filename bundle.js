@@ -258,6 +258,7 @@ function () {
     this.soundMuted = true;
     this.soundButtonX = 425;
     this.soundButtonY = 590;
+    this.game = true;
     this.gameOver = true;
     this.gameOngoing = false;
     this.introOutro = new _intro_outro__WEBPACK_IMPORTED_MODULE_0__["default"](ctx);
@@ -322,10 +323,11 @@ function () {
       var _this2 = this;
 
       var img = new Image(25, 25);
+      var backgroundColor = this.gameOngoing ? "rgba(255,255,255,0)" : "rgba(255,255,255,1)";
 
       img.onload = function () {
         ctx.clearRect(_this2.soundButtonX, _this2.soundButtonY, 25, 25);
-        ctx.fillStyle = "rgba(255,255,255,0.3)";
+        ctx.fillStyle = backgroundColor;
         ctx.fillRect(_this2.soundButtonX, _this2.soundButtonY, 25, 25);
         ctx.beginPath();
         ctx.drawImage(img, _this2.soundButtonX, _this2.soundButtonY, 25, 25);
@@ -341,18 +343,28 @@ function () {
       if (this.board.timer.time == 0) this.endGame();
     }
   }, {
-    key: "draw",
-    value: function draw() {
-      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png'); // if (this.gameOver && !this.gameOngoing) {
-      //   this.introOutro.drawIntro();
-      // }
-
-      if (!this.gameOngoing) {
+    key: "gameStartListener",
+    value: function gameStartListener() {
+      if (this.introOutro.beginGame) {
+        clearInterval(this.listenerInt);
+        console.log('ello there');
+        this.gameOngoing = true;
         this.ctx.clearRect(1, 1, 478, 638);
         this.board.draw();
+        this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw() {
+      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
+
+      if (this.gameOver) {
+        this.introOutro.drawIntro();
       }
 
-      this.gameOverListener(this);
+      this.listenerInt = setInterval(this.gameStartListener.bind(this), 500);
+      this.gameOverListenerInt = setInterval(this.gameOverListener.bind(this), 500);
     }
   }]);
 
@@ -765,17 +777,95 @@ function () {
 
     this.ctx = ctx;
     this.highscore = '';
+    this.beginGame = false;
+    this.canvas = document.getElementById("zoo-canvas");
+    this.selectGameMode = this.selectGameMode.bind(this);
+    this.hoverDescription = this.hoverDescription.bind(this);
   }
 
   _createClass(IntroOutro, [{
     key: "drawIntro",
     value: function drawIntro() {
+      console.log('drawIntro');
+      this.canvas.addEventListener("click", this.selectGameMode, false);
+      this.canvas.addEventListener("mousemove", this.hoverDescription, false);
       this.ctx.clearRect(1, 1, 478, 638);
-      this.ctx.fillStyle = "rgba(255,255,255,0.3)";
+      this.ctx.fillStyle = "rgba(255,255,255,1)";
       this.ctx.fillRect(1, 1, 478, 638);
-      this.ctx.font = "30px Open Sans";
+      this.ctx.font = "50px Open Sans";
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Zoooooooo Dots!", 150, 50);
+      this.ctx.fillText("Zoo Dots!", 140, 150);
+      this.drawTimedMode(this.ctx);
+    }
+  }, {
+    key: "drawTimedMode",
+    value: function drawTimedMode(ctx) {
+      console.log('drawTimedMode');
+      ctx.beginPath();
+      ctx.fillStyle = '#ea8700';
+      ctx.arc(240, 350, 50, 0, 2 * Math.PI);
+      ctx.fill();
+      var img = new Image(65, 65);
+
+      img.onload = function () {
+        ctx.beginPath();
+        ctx.drawImage(img, 207.5, 317.5, 65, 65);
+        ctx.closePath();
+        ctx.fill();
+      };
+
+      img.src = "./assets/five-oclock.png";
+    } //Y 301, 400
+    //X 193, 292
+
+  }, {
+    key: "selectGameMode",
+    value: function selectGameMode(e) {
+      var _this = this;
+
+      e.preventDefault();
+
+      if (e.offsetX >= 193 && e.offsetX <= 292 && e.offsetY >= 301 && e.offsetY <= 400) {
+        this.ctx.beginPath();
+        this.ctx.fillStyle = '#8ecb1e';
+        this.ctx.arc(240, 350, 50, 0, 2 * Math.PI);
+        this.ctx.fill();
+        this.beginGame = true;
+        this.ctx.clearRect(1, 1, 478, 638);
+        console.log('selected');
+        this.canvas.removeEventListener("click", this.selectGameMode);
+        this.canvas.removeEventListener("mousemove", this.hoverDescription);
+      }
+
+      var img = new Image(65, 65);
+
+      img.onload = function () {
+        _this.ctx.beginPath();
+
+        _this.ctx.drawImage(img, 207.5, 317.5, 65, 65);
+
+        _this.ctx.closePath();
+
+        _this.ctx.fill();
+      };
+
+      img.src = "./assets/five-oclock.png"; //get rid of intro-outro listeners
+    }
+  }, {
+    key: "hoverDescription",
+    value: function hoverDescription(e) {
+      this.ctx.clearRect(290, 345, 175, 40);
+      this.ctx.fillStyle = 'white';
+      this.ctx.fillRect(290, 345, 175, 40);
+
+      if (e.offsetX >= 193 && e.offsetX <= 292 && e.offsetY >= 301 && e.offsetY <= 400) {
+        this.ctx.clearRect(290, 345, 175, 40);
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(290, 345, 175, 40);
+        this.ctx.font = "25px Open Sans";
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText("Timed Mode!", 290, 370);
+      }
     }
   }, {
     key: "drawGameOver",
@@ -838,9 +928,7 @@ document.addEventListener("DOMContentLoaded", function () {
     game.draw();
   }
 
-  requestAnimationFrame(function () {
-    return draw(ctx);
-  });
+  draw(ctx);
 });
 
 /***/ }),

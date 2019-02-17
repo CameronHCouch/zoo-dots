@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
     game.draw();
   }
-  
-  requestAnimationFrame(() => draw(ctx));
+
+  draw(ctx);
 
 })

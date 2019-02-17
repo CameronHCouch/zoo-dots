@@ -12,6 +12,7 @@ class Game {
     this.soundButtonX = 425;
     this.soundButtonY = 590;
 
+    this.game = true;
     this.gameOver = true;
     this.gameOngoing = false;
 
@@ -66,9 +67,10 @@ class Game {
 
   drawSoundButton(ctx, imageSource) {
     let img = new Image(25, 25);
+    let backgroundColor = this.gameOngoing ? "rgba(255,255,255,0)" : "rgba(255,255,255,1)";
     img.onload = () => {
       ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
-      ctx.fillStyle = "rgba(255,255,255,0.3)";
+      ctx.fillStyle = backgroundColor;
       ctx.fillRect(this.soundButtonX, this.soundButtonY, 25, 25);
       ctx.beginPath();
       ctx.drawImage(img, this.soundButtonX, this.soundButtonY, 25, 25);
@@ -82,19 +84,28 @@ class Game {
     if (this.board.timer.time == 0) this.endGame();
   }
 
+  gameStartListener(){
+    if (this.introOutro.beginGame) {
+      clearInterval(this.listenerInt);
+      console.log('ello there');
+      this.gameOngoing = true;
+      this.ctx.clearRect(1, 1, 478, 638);
+      this.board.draw();
+      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
+    }
+    
+  }
+
   draw() {
     this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
 
-    // if (this.gameOver && !this.gameOngoing) {
-    //   this.introOutro.drawIntro();
-    // }
-
-    if (!this.gameOngoing) {
-      this.ctx.clearRect(1, 1, 478, 638);
-      this.board.draw();
+    if (this.gameOver) {
+      this.introOutro.drawIntro();
     }
 
-    this.gameOverListener(this);
+    this.listenerInt = setInterval(this.gameStartListener.bind(this), 500);
+    this.gameOverListenerInt = setInterval(this.gameOverListener.bind(this), 500);
+
   }
 
 }
