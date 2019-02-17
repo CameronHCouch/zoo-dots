@@ -14,6 +14,8 @@ class GameBoard {
     this.mouseDownHandler = this.mouseDownHandler.bind(this);
     this.mouseUpHandler = this.mouseUpHandler.bind(this);
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
+
+    this.timeOutListenerInt = '';
   }
 
   draw() {
@@ -24,16 +26,16 @@ class GameBoard {
     let int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
     let int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
     let int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
-    let int4 = setInterval(this.timeOutListener.bind(this, int1, int2, int3, int4))
+    this.timeOutListenerInt = setInterval(this.timeOutListener.bind(this, [int1, int2, int3]));
   }
 
-  timeOutListener(int1, int2, int3, int4){
-    console.log(this.timer)
+  timeOutListener(intervalArr){
     if (this.timer.time <= 0) {
-      clearInterval(int1);
-      clearInterval(int2);
-      clearInterval(int3);
-      clearInterval(int4);
+      intervalArr.forEach((interval) => {
+        clearInterval(interval);
+      })
+      clearInterval(this.timeOutListenerInt);
+      this.grid.clearLine();
       this.canvas.removeEventListener("mousedown", this.mouseDownHandler, false);
       this.canvas.removeEventListener("mouseup", this.mouseUpHandler, false);
       this.canvas.removeEventListener("mousemove", this.mouseMoveHandler, false);

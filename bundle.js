@@ -417,6 +417,7 @@ function () {
     this.mouseDownHandler = this.mouseDownHandler.bind(this);
     this.mouseUpHandler = this.mouseUpHandler.bind(this);
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
+    this.timeOutListenerInt = '';
   }
 
   _createClass(GameBoard, [{
@@ -428,18 +429,17 @@ function () {
       var int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
       var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
-      var int4 = setInterval(this.timeOutListener.bind(this, int1, int2, int3, int4));
+      this.timeOutListenerInt = setInterval(this.timeOutListener.bind(this, [int1, int2, int3]));
     }
   }, {
     key: "timeOutListener",
-    value: function timeOutListener(int1, int2, int3, int4) {
-      console.log(this.timer);
-
+    value: function timeOutListener(intervalArr) {
       if (this.timer.time <= 0) {
-        clearInterval(int1);
-        clearInterval(int2);
-        clearInterval(int3);
-        clearInterval(int4);
+        intervalArr.forEach(function (interval) {
+          clearInterval(interval);
+        });
+        clearInterval(this.timeOutListenerInt);
+        this.grid.clearLine();
         this.canvas.removeEventListener("mousedown", this.mouseDownHandler, false);
         this.canvas.removeEventListener("mouseup", this.mouseUpHandler, false);
         this.canvas.removeEventListener("mousemove", this.mouseMoveHandler, false);
@@ -805,6 +805,8 @@ function () {
     this.canvas = document.getElementById("zoo-canvas");
     this.selectGameMode = this.selectGameMode.bind(this);
     this.hoverDescription = this.hoverDescription.bind(this);
+    this.handleOutroClick = this.handleOutroClick.bind(this);
+    this.handleOutroHover = this.handleOutroHover.bind(this);
   }
 
   _createClass(IntroOutro, [{
@@ -824,7 +826,6 @@ function () {
   }, {
     key: "drawTimedMode",
     value: function drawTimedMode(ctx) {
-      console.log('drawTimedMode');
       ctx.beginPath();
       ctx.fillStyle = '#ea8700';
       ctx.arc(240, 350, 50, 0, 2 * Math.PI);
@@ -896,17 +897,118 @@ function () {
     value: function drawOutro(score) {
       console.log('drawOutro');
       this.ctx.clearRect(1, 1, 478, 638);
-      this.ctx.fillStyle = "rgba(255,255,255,1)";
+      this.ctx.fillStyle = "rgba(255,255,255,0.5)";
       this.ctx.fillRect(1, 1, 478, 638);
       this.ctx.font = "50px Open Sans";
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Game Over!", 140, 150);
-      this.ctx.fillText("Score: ".concat(score), 140, 250);
+      this.ctx.fillText("Game Over!", 100, 200);
+      this.ctx.fillText("Score: ".concat(score), 140, 300);
+      this.canvas.addEventListener("click", this.handleOutroClick, false);
+      this.canvas.addEventListener("mousemove", this.handleOutroHover, false);
       this.drawPlayAgain();
+      this.drawMenuButton();
     }
   }, {
     key: "drawPlayAgain",
-    value: function drawPlayAgain() {}
+    value: function drawPlayAgain() {
+      this.ctx.beginPath();
+      this.ctx.fillStyle = '#ea8700';
+      this.ctx.arc(195, 380, 40, 0, 2 * Math.PI);
+      this.ctx.fill();
+      this.ctx.font = "15px Open Sans";
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText("Play", 180, 370);
+      this.ctx.fillText("Again", 175, 390);
+    }
+  }, {
+    key: "drawMenuButton",
+    value: function drawMenuButton() {
+      this.ctx.beginPath();
+      this.ctx.fillStyle = '#8ecb1e';
+      this.ctx.arc(285, 380, 40, 0, 2 * Math.PI);
+      this.ctx.fill();
+      this.ctx.font = "15px Open Sans";
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText("Main", 268, 370);
+      this.ctx.fillText("Menu", 265, 390);
+    } // play again
+    // X 155 240
+    // Y 342 421
+    // main menu
+    // X 247 325
+    // Y 342 421
+
+  }, {
+    key: "handleOutroClick",
+    value: function handleOutroClick(e) {
+      e.preventDefault();
+      console.log(e.offsetX, e.offsetY);
+
+      if (e.offsetX >= 155 && e.offsetX <= 240 && e.offsetY >= 342 && e.offsetY <= 421) {
+        this.beginGame = true;
+        this.ctx.clearRect(1, 1, 478, 638);
+        this.canvas.removeEventListener("click", this.handleOutroClick);
+        this.canvas.removeEventListener("mousemove", this.handleOutroHover);
+      }
+    }
+  }, {
+    key: "handleOutroHover",
+    value: function handleOutroHover(e) {
+      if (e.offsetX >= 155 && e.offsetX <= 240 && e.offsetY >= 342 && e.offsetY <= 421) {
+        console.log('it rly me');
+        this.ctx.clearRect(155, 342, 80, 80);
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        this.ctx.fillRect(155, 342, 80, 80);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = '#fa8700';
+        this.ctx.arc(195, 380, 40, 0, 2 * Math.PI);
+        this.ctx.fill();
+        this.ctx.font = "15px Open Sans";
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText("Play", 180, 370);
+        this.ctx.fillText("Again", 175, 390);
+      } else {
+        this.ctx.clearRect(155, 342, 80, 80);
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        this.ctx.fillRect(155, 342, 80, 80);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = '#ea8700';
+        this.ctx.arc(195, 380, 40, 0, 2 * Math.PI);
+        this.ctx.fill();
+        this.ctx.font = "15px Open Sans";
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText("Play", 180, 370);
+        this.ctx.fillText("Again", 175, 390);
+      } // main menu
+
+
+      if (e.offsetX >= 247 && e.offsetX <= 325 && e.offsetY >= 342 && e.offsetY <= 421) {
+        console.log('it rly me');
+        this.ctx.clearRect(247, 325, 80, 80);
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        this.ctx.fillRect(247, 325, 80, 80);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = '#7ecb1e';
+        this.ctx.arc(285, 380, 40, 0, 2 * Math.PI);
+        this.ctx.fill();
+        this.ctx.font = "15px Open Sans";
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText("Main", 268, 370);
+        this.ctx.fillText("Menu", 265, 390);
+      } else {
+        this.ctx.clearRect(247, 325, 80, 80);
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        this.ctx.fillRect(247, 325, 80, 80);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = '#8ecb1e';
+        this.ctx.arc(285, 380, 40, 0, 2 * Math.PI);
+        this.ctx.fill();
+        this.ctx.font = "15px Open Sans";
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText("Main", 268, 370);
+        this.ctx.fillText("Menu", 265, 390);
+      }
+    }
   }]);
 
   return IntroOutro;
@@ -1016,7 +1118,7 @@ function () {
     _classCallCheck(this, Timer);
 
     this.start = Date.now();
-    this.time = 5;
+    this.time = 2;
   }
 
   _createClass(Timer, [{
@@ -1032,7 +1134,7 @@ function () {
     key: "countDown",
     value: function countDown() {
       if (this.time > 0) {
-        this.time = 5 - Math.floor((Date.now() - this.start) / 1000);
+        this.time = 2 - Math.floor((Date.now() - this.start) / 1000);
       }
     }
   }]);
