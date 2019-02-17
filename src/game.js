@@ -1,10 +1,12 @@
 
 import IntroOutro from './intro_outro';
+import Board from './game_board';
 
 class Game {
-  constructor(board, ctx) {
-    this.board = board;
+  constructor(ctx, ctx2) {
+    this.board = '';
     this.ctx = ctx;
+    this.ctx2 = ctx2;
 
     this.handleMouseMove = false;
     this.bgMusic = "";
@@ -12,7 +14,6 @@ class Game {
     this.soundButtonX = 425;
     this.soundButtonY = 590;
 
-    this.game = true;
     this.gameOver = true;
     this.gameOngoing = false;
 
@@ -28,7 +29,9 @@ class Game {
   };
 
   start() {
-    this.gameOver = false;
+    this.board = new Board(this.ctx, this.ctx2);
+    this.introOutro.game = this;
+
     this.draw();
     this.loadBackgroundMusic();
   }
@@ -67,7 +70,7 @@ class Game {
 
   drawSoundButton(ctx, imageSource) {
     let img = new Image(25, 25);
-    let backgroundColor = this.gameOngoing ? "rgba(255,255,255,0)" : "rgba(255,255,255,1)";
+    let backgroundColor = this.gameOngoing ? "rgba(255,255,255,0)" : "rgba(255,255,255,0.5)";
     img.onload = () => {
       ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
       ctx.fillStyle = backgroundColor;
@@ -81,18 +84,20 @@ class Game {
   }
 
   gameOverListener() {
+    console.log(this.introOutro.beginGame)
     if (this.board.timer.time == 0) {
       clearInterval(this.gameOverListenerInt);
+      this.board.timer.reset();
       this.gameOngoing = false;
       this.ctx.clearRect(1, 1, 478, 638);
       this.introOutro.drawOutro(this.board.score.score);
+      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
     }
   }
 
   gameStartListener(){
     if (this.introOutro.beginGame) {
-      clearInterval(this.listenerInt);
-      console.log('ello there');
+      clearInterval(this.startListenerInt);
       this.gameOngoing = true;
       this.ctx.clearRect(1, 1, 478, 638);
       this.board.draw();
@@ -105,12 +110,11 @@ class Game {
     this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
 
     if (this.gameOver) {
+      this.gameOngoing = false;
       this.introOutro.drawIntro();
     }
-
-    this.listenerInt = setInterval(this.gameStartListener.bind(this), 500);
+    this.startListenerInt = setInterval(this.gameStartListener.bind(this), 400);
     this.gameOverListenerInt = setInterval(this.gameOverListener.bind(this), 500);
-
   }
 
 }

@@ -1,5 +1,3 @@
-
-import Board from './game_board';
 import Game from './game';
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,14 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ctx = canvas.getContext('2d');
   const ctx2 = canvas2.getContext('2d');
-  let board = new Board(ctx, ctx2);
-  let game = new Game(board, ctx);
+  let game = new Game(ctx, ctx2);
 
   function draw(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    game.draw();
+    game.start();
   }
 
   draw(ctx);

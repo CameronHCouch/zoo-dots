@@ -2,7 +2,8 @@
 class Timer {
   constructor(){
     this.start = Date.now();
-    this.time = 2;
+    this.time = 10;
+    this.startTime = 10;
   }
 
   draw(ctx) {
@@ -15,8 +16,13 @@ class Timer {
 
   countDown() {
     if (this.time > 0) {
-      this.time = 2 - Math.floor((Date.now() - this.start) / 1000)
+      this.time = this.startTime - Math.floor((Date.now() - this.start) / 1000)
     }
+  }
+
+  reset() {
+    this.startTime = 10;
+    this.time = 10;
   }
 }
 export default Timer;

@@ -237,6 +237,7 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _intro_outro__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./intro_outro */ "./src/intro_outro.js");
+/* harmony import */ var _game_board__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game_board */ "./src/game_board.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -245,20 +246,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
 var Game =
 /*#__PURE__*/
 function () {
-  function Game(board, ctx) {
+  function Game(ctx, ctx2) {
     _classCallCheck(this, Game);
 
-    this.board = board;
+    this.board = '';
     this.ctx = ctx;
+    this.ctx2 = ctx2;
     this.handleMouseMove = false;
     this.bgMusic = "";
     this.soundMuted = true;
     this.soundButtonX = 425;
     this.soundButtonY = 590;
-    this.game = true;
     this.gameOver = true;
     this.gameOngoing = false;
     this.introOutro = new _intro_outro__WEBPACK_IMPORTED_MODULE_0__["default"](ctx);
@@ -275,7 +277,8 @@ function () {
   }, {
     key: "start",
     value: function start() {
-      this.gameOver = false;
+      this.board = new _game_board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.ctx2);
+      this.introOutro.game = this;
       this.draw();
       this.loadBackgroundMusic();
     }
@@ -323,7 +326,7 @@ function () {
       var _this2 = this;
 
       var img = new Image(25, 25);
-      var backgroundColor = this.gameOngoing ? "rgba(255,255,255,0)" : "rgba(255,255,255,1)";
+      var backgroundColor = this.gameOngoing ? "rgba(255,255,255,0)" : "rgba(255,255,255,0.5)";
 
       img.onload = function () {
         ctx.clearRect(_this2.soundButtonX, _this2.soundButtonY, 25, 25);
@@ -340,19 +343,22 @@ function () {
   }, {
     key: "gameOverListener",
     value: function gameOverListener() {
+      console.log(this.introOutro.beginGame);
+
       if (this.board.timer.time == 0) {
         clearInterval(this.gameOverListenerInt);
+        this.board.timer.reset();
         this.gameOngoing = false;
         this.ctx.clearRect(1, 1, 478, 638);
         this.introOutro.drawOutro(this.board.score.score);
+        this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
       }
     }
   }, {
     key: "gameStartListener",
     value: function gameStartListener() {
       if (this.introOutro.beginGame) {
-        clearInterval(this.listenerInt);
-        console.log('ello there');
+        clearInterval(this.startListenerInt);
         this.gameOngoing = true;
         this.ctx.clearRect(1, 1, 478, 638);
         this.board.draw();
@@ -365,10 +371,11 @@ function () {
       this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
 
       if (this.gameOver) {
+        this.gameOngoing = false;
         this.introOutro.drawIntro();
       }
 
-      this.listenerInt = setInterval(this.gameStartListener.bind(this), 500);
+      this.startListenerInt = setInterval(this.gameStartListener.bind(this), 400);
       this.gameOverListenerInt = setInterval(this.gameOverListener.bind(this), 500);
     }
   }]);
@@ -800,7 +807,7 @@ function () {
     _classCallCheck(this, IntroOutro);
 
     this.ctx = ctx;
-    this.highscore = '';
+    this.highScore = 0;
     this.beginGame = false;
     this.canvas = document.getElementById("zoo-canvas");
     this.selectGameMode = this.selectGameMode.bind(this);
@@ -816,7 +823,7 @@ function () {
       this.canvas.addEventListener("click", this.selectGameMode, false);
       this.canvas.addEventListener("mousemove", this.hoverDescription, false);
       this.ctx.clearRect(1, 1, 478, 638);
-      this.ctx.fillStyle = "rgba(255,255,255,1)";
+      this.ctx.fillStyle = "rgba(255,255,255,0.5)";
       this.ctx.fillRect(1, 1, 478, 638);
       this.ctx.font = "50px Open Sans";
       this.ctx.fillStyle = 'black';
@@ -880,12 +887,12 @@ function () {
     key: "hoverDescription",
     value: function hoverDescription(e) {
       this.ctx.clearRect(290, 345, 175, 40);
-      this.ctx.fillStyle = 'white';
+      this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
       this.ctx.fillRect(290, 345, 175, 40);
 
       if (e.offsetX >= 193 && e.offsetX <= 292 && e.offsetY >= 301 && e.offsetY <= 400) {
         this.ctx.clearRect(290, 345, 175, 40);
-        this.ctx.fillStyle = 'white';
+        this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
         this.ctx.fillRect(290, 345, 175, 40);
         this.ctx.font = "25px Open Sans";
         this.ctx.fillStyle = 'black';
@@ -895,18 +902,31 @@ function () {
   }, {
     key: "drawOutro",
     value: function drawOutro(score) {
-      console.log('drawOutro');
       this.ctx.clearRect(1, 1, 478, 638);
       this.ctx.fillStyle = "rgba(255,255,255,0.5)";
       this.ctx.fillRect(1, 1, 478, 638);
-      this.ctx.font = "50px Open Sans";
-      this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Game Over!", 100, 200);
-      this.ctx.fillText("Score: ".concat(score), 140, 300);
+      this.updateHighScore(score);
+      this.ctx.font = "45px Open Sans";
+      this.ctx.fillStyle = '#3b454d';
+      this.ctx.fillText("Game Over!", 111, 150);
+      this.ctx.font = "30px Open Sans";
+      this.ctx.fillText("High Score: ".concat(this.highScore), 140, 230);
+      this.ctx.fillText("Score: ".concat(score), 175, 290);
       this.canvas.addEventListener("click", this.handleOutroClick, false);
       this.canvas.addEventListener("mousemove", this.handleOutroHover, false);
       this.drawPlayAgain();
       this.drawMenuButton();
+    }
+  }, {
+    key: "updateHighScore",
+    value: function updateHighScore(score) {
+      if (score > this.highScore) {
+        this.highScore = score;
+        this.ctx.font = "15px Open Sans";
+        this.ctx.fillStyle = 'red';
+        this.ctx.fillText("NEW HIGH", 60, 219);
+        this.ctx.fillText("SCORE!", 75, 232);
+      }
     }
   }, {
     key: "drawPlayAgain",
@@ -931,13 +951,7 @@ function () {
       this.ctx.fillStyle = 'black';
       this.ctx.fillText("Main", 268, 370);
       this.ctx.fillText("Menu", 265, 390);
-    } // play again
-    // X 155 240
-    // Y 342 421
-    // main menu
-    // X 247 325
-    // Y 342 421
-
+    }
   }, {
     key: "handleOutroClick",
     value: function handleOutroClick(e) {
@@ -949,13 +963,22 @@ function () {
         this.ctx.clearRect(1, 1, 478, 638);
         this.canvas.removeEventListener("click", this.handleOutroClick);
         this.canvas.removeEventListener("mousemove", this.handleOutroHover);
+        this.game.start();
+      }
+
+      if (e.offsetX >= 247 && e.offsetX <= 325 && e.offsetY >= 342 && e.offsetY <= 421) {
+        this.beginGame = false;
+        this.ctx.clearRect(1, 1, 478, 638);
+        this.canvas.removeEventListener("click", this.handleOutroClick);
+        this.canvas.removeEventListener("mousemove", this.handleOutroHover);
+        this.game.start();
       }
     }
   }, {
     key: "handleOutroHover",
     value: function handleOutroHover(e) {
+      //play again button
       if (e.offsetX >= 155 && e.offsetX <= 240 && e.offsetY >= 342 && e.offsetY <= 421) {
-        console.log('it rly me');
         this.ctx.clearRect(155, 342, 80, 80);
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         this.ctx.fillRect(155, 342, 80, 80);
@@ -964,7 +987,7 @@ function () {
         this.ctx.arc(195, 380, 40, 0, 2 * Math.PI);
         this.ctx.fill();
         this.ctx.font = "15px Open Sans";
-        this.ctx.fillStyle = 'black';
+        this.ctx.fillStyle = 'white';
         this.ctx.fillText("Play", 180, 370);
         this.ctx.fillText("Again", 175, 390);
       } else {
@@ -979,11 +1002,10 @@ function () {
         this.ctx.fillStyle = 'black';
         this.ctx.fillText("Play", 180, 370);
         this.ctx.fillText("Again", 175, 390);
-      } // main menu
+      } // main menu button
 
 
       if (e.offsetX >= 247 && e.offsetX <= 325 && e.offsetY >= 342 && e.offsetY <= 421) {
-        console.log('it rly me');
         this.ctx.clearRect(247, 325, 80, 80);
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         this.ctx.fillRect(247, 325, 80, 80);
@@ -992,7 +1014,7 @@ function () {
         this.ctx.arc(285, 380, 40, 0, 2 * Math.PI);
         this.ctx.fill();
         this.ctx.font = "15px Open Sans";
-        this.ctx.fillStyle = 'black';
+        this.ctx.fillStyle = 'white';
         this.ctx.fillText("Main", 268, 370);
         this.ctx.fillText("Menu", 265, 390);
       } else {
@@ -1027,9 +1049,7 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _game_board__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game_board */ "./src/game_board.js");
-/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./src/game.js");
-
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./src/game.js");
 
 document.addEventListener("DOMContentLoaded", function () {
   var canvas = document.getElementById("zoo-canvas");
@@ -1040,14 +1060,13 @@ document.addEventListener("DOMContentLoaded", function () {
   canvas2.height = 640;
   var ctx = canvas.getContext('2d');
   var ctx2 = canvas2.getContext('2d');
-  var board = new _game_board__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2);
-  var game = new _game__WEBPACK_IMPORTED_MODULE_1__["default"](board, ctx);
+  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2);
 
   function draw(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    game.draw();
+    game.start();
   }
 
   draw(ctx);
@@ -1118,7 +1137,8 @@ function () {
     _classCallCheck(this, Timer);
 
     this.start = Date.now();
-    this.time = 2;
+    this.time = 10;
+    this.startTime = 10;
   }
 
   _createClass(Timer, [{
@@ -1134,8 +1154,14 @@ function () {
     key: "countDown",
     value: function countDown() {
       if (this.time > 0) {
-        this.time = 2 - Math.floor((Date.now() - this.start) / 1000);
+        this.time = this.startTime - Math.floor((Date.now() - this.start) / 1000);
       }
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.startTime = 10;
+      this.time = 10;
     }
   }]);
 
