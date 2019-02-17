@@ -15,8 +15,8 @@ In this game, players will:
 - [x] Undo a selection by reversing the path their mouse traced
 - [x] Remove all animals of a given species when a square is made
 - [x] See their final score when the game is over
-- [ ] See their top score
-- [ ] Play Again or Return to Home Screen
+- [x] See their top score
+- [x] Play Again or Return to Home Screen
 
 Additional MVPs:
 - [x] Concise tutorial text for new players

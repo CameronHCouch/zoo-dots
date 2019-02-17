@@ -42,9 +42,11 @@ class Game {
         if (!this.soundMuted) {
           this.toggleSound();
           this.bgMusic.pause();
+          this.drawSoundButton(this.ctx, this.soundImage());
         } else if (this.soundMuted) {
           this.toggleSound();
           this.bgMusic.play();
+          this.drawSoundButton(this.ctx, this.soundImage());
         }
       }
     });
@@ -52,13 +54,15 @@ class Game {
 
   toggleSound() {
     this.soundMuted = !this.soundMuted;
-    let imageSource;
+    this.drawSoundButton(this.ctx, this.soundImage());
+  }
+
+  soundImage(){
     if (this.soundMuted == true) {
-      imageSource = './assets/speaker-high-volume.png'
+      return './assets/speaker-high-volume.png'
     } else {
-      imageSource = './assets/muted-speaker.png';
+      return './assets/muted-speaker.png';
     }
-    this.drawSoundButton(this.ctx, imageSource);
   }
 
   muteClicked(e) {
@@ -90,23 +94,25 @@ class Game {
       this.gameOngoing = false;
       this.ctx.clearRect(1, 1, 478, 638);
       this.introOutro.drawOutro(this.board.score.score);
-      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
+      this.drawSoundButton(this.ctx, this.soundImage());
     }
   }
 
   gameStartListener(){
     if (this.introOutro.beginGame) {
+      this.ctx.clearRect(1, 1, 478, 638);
       clearInterval(this.startListenerInt);
       this.gameOngoing = true;
-      this.ctx.clearRect(1, 1, 478, 638);
+      this.drawSoundButton(this.ctx, this.soundImage());
       this.board.draw();
-      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
     }
     
   }
 
   draw() {
-    this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
+    console.log('sound draw?')
+    console.log(this.soundImage());
+    this.drawSoundButton(this.ctx, this.soundImage());
 
     if (this.gameOver) {
       this.gameOngoing = false;

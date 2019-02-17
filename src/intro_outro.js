@@ -158,6 +158,7 @@ class IntroOutro {
       this.canvas.removeEventListener("mousemove", this.handleOutroHover);
       this.ctx.clearRect(1, 1, 478, 638);
       this.game.gameOver = false;
+      this.game.gameOngoing = true;
       this.game.start();
     }
 

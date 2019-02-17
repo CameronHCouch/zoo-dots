@@ -293,10 +293,14 @@ function () {
             _this.toggleSound();
 
             _this.bgMusic.pause();
+
+            _this.drawSoundButton(_this.ctx, _this.soundImage());
           } else if (_this.soundMuted) {
             _this.toggleSound();
 
             _this.bgMusic.play();
+
+            _this.drawSoundButton(_this.ctx, _this.soundImage());
           }
         }
       });
@@ -305,15 +309,16 @@ function () {
     key: "toggleSound",
     value: function toggleSound() {
       this.soundMuted = !this.soundMuted;
-      var imageSource;
-
+      this.drawSoundButton(this.ctx, this.soundImage());
+    }
+  }, {
+    key: "soundImage",
+    value: function soundImage() {
       if (this.soundMuted == true) {
-        imageSource = './assets/speaker-high-volume.png';
+        return './assets/speaker-high-volume.png';
       } else {
-        imageSource = './assets/muted-speaker.png';
+        return './assets/muted-speaker.png';
       }
-
-      this.drawSoundButton(this.ctx, imageSource);
     }
   }, {
     key: "muteClicked",
@@ -349,24 +354,26 @@ function () {
         this.gameOngoing = false;
         this.ctx.clearRect(1, 1, 478, 638);
         this.introOutro.drawOutro(this.board.score.score);
-        this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
+        this.drawSoundButton(this.ctx, this.soundImage());
       }
     }
   }, {
     key: "gameStartListener",
     value: function gameStartListener() {
       if (this.introOutro.beginGame) {
+        this.ctx.clearRect(1, 1, 478, 638);
         clearInterval(this.startListenerInt);
         this.gameOngoing = true;
-        this.ctx.clearRect(1, 1, 478, 638);
+        this.drawSoundButton(this.ctx, this.soundImage());
         this.board.draw();
-        this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
       }
     }
   }, {
     key: "draw",
     value: function draw() {
-      this.drawSoundButton(this.ctx, './assets/speaker-high-volume.png');
+      console.log('sound draw?');
+      console.log(this.soundImage());
+      this.drawSoundButton(this.ctx, this.soundImage());
 
       if (this.gameOver) {
         this.gameOngoing = false;
@@ -955,6 +962,7 @@ function () {
         this.canvas.removeEventListener("mousemove", this.handleOutroHover);
         this.ctx.clearRect(1, 1, 478, 638);
         this.game.gameOver = false;
+        this.game.gameOngoing = true;
         this.game.start();
       }
 
