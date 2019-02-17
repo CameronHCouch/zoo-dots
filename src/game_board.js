@@ -8,19 +8,36 @@ class GameBoard {
     this.score = new Score();
     this.grid = new Grid(ctx, ctx2, this.score);
     this.ctx = ctx;
+    this.canvas = document.getElementById('zoo-canvas');
+
     this.handleMouseMove = false;
+    this.mouseDownHandler = this.mouseDownHandler.bind(this);
+    this.mouseUpHandler = this.mouseUpHandler.bind(this);
+    this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
   }
 
   draw() {
-    let canvas = document.getElementById("zoo-canvas");
-    canvas.addEventListener("mousedown", this.mouseDownHandler.bind(this), false);
-    canvas.addEventListener("mouseup", this.mouseUpHandler.bind(this), false);
-    canvas.addEventListener("mousemove", this.mouseMoveHandler.bind(this), false);
+    this.canvas.addEventListener("mousedown", this.mouseDownHandler, false);
+    this.canvas.addEventListener("mouseup", this.mouseUpHandler, false);
+    this.canvas.addEventListener("mousemove", this.mouseMoveHandler, false);
     
     let int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
     let int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
     let int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
-    // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
+    let int4 = setInterval(this.timeOutListener.bind(this, int1, int2, int3, int4))
+  }
+
+  timeOutListener(int1, int2, int3, int4){
+    console.log(this.timer)
+    if (this.timer.time <= 0) {
+      clearInterval(int1);
+      clearInterval(int2);
+      clearInterval(int3);
+      clearInterval(int4);
+      this.canvas.removeEventListener("mousedown", this.mouseDownHandler, false);
+      this.canvas.removeEventListener("mouseup", this.mouseUpHandler, false);
+      this.canvas.removeEventListener("mousemove", this.mouseMoveHandler, false);
+    }
   }
 
   validRange(e){

@@ -340,7 +340,12 @@ function () {
   }, {
     key: "gameOverListener",
     value: function gameOverListener() {
-      if (this.board.timer.time == 0) this.endGame();
+      if (this.board.timer.time == 0) {
+        clearInterval(this.gameOverListenerInt);
+        this.gameOngoing = false;
+        this.ctx.clearRect(1, 1, 478, 638);
+        this.introOutro.drawOutro(this.board.score.score);
+      }
     }
   }, {
     key: "gameStartListener",
@@ -407,19 +412,38 @@ function () {
     this.score = new _score__WEBPACK_IMPORTED_MODULE_2__["default"]();
     this.grid = new _grid__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2, this.score);
     this.ctx = ctx;
+    this.canvas = document.getElementById('zoo-canvas');
     this.handleMouseMove = false;
+    this.mouseDownHandler = this.mouseDownHandler.bind(this);
+    this.mouseUpHandler = this.mouseUpHandler.bind(this);
+    this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
   }
 
   _createClass(GameBoard, [{
     key: "draw",
     value: function draw() {
-      var canvas = document.getElementById("zoo-canvas");
-      canvas.addEventListener("mousedown", this.mouseDownHandler.bind(this), false);
-      canvas.addEventListener("mouseup", this.mouseUpHandler.bind(this), false);
-      canvas.addEventListener("mousemove", this.mouseMoveHandler.bind(this), false);
+      this.canvas.addEventListener("mousedown", this.mouseDownHandler, false);
+      this.canvas.addEventListener("mouseup", this.mouseUpHandler, false);
+      this.canvas.addEventListener("mousemove", this.mouseMoveHandler, false);
       var int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-      var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750); // if (this.timer.time <= 0) clearInterval(int1, int2, int3);
+      var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
+      var int4 = setInterval(this.timeOutListener.bind(this, int1, int2, int3, int4));
+    }
+  }, {
+    key: "timeOutListener",
+    value: function timeOutListener(int1, int2, int3, int4) {
+      console.log(this.timer);
+
+      if (this.timer.time <= 0) {
+        clearInterval(int1);
+        clearInterval(int2);
+        clearInterval(int3);
+        clearInterval(int4);
+        this.canvas.removeEventListener("mousedown", this.mouseDownHandler, false);
+        this.canvas.removeEventListener("mouseup", this.mouseUpHandler, false);
+        this.canvas.removeEventListener("mousemove", this.mouseMoveHandler, false);
+      }
     }
   }, {
     key: "validRange",
@@ -868,25 +892,21 @@ function () {
       }
     }
   }, {
-    key: "drawGameOver",
-    value: function drawGameOver() {
-      this.ctx.clearRect(0, 0, 480, 640);
-    } // mouseDownHandler(e) {
-    //   this.grid.handleMouseDown(e);
-    //   this.grid.toggleLineDrawing('on');
-    //   this.handleMouseMove = true;
-    // }
-    // mouseUpHandler(e) {
-    //   this.grid.handleMouseUp(e);
-    //   this.grid.toggleLineDrawing('off');
-    //   this.handleMouseMove = false;
-    // }
-    // mouseMoveHandler(e) {
-    //   if (this.handleMouseMove) {
-    //     this.grid.connectDots(e);
-    //   }
-    // }
-
+    key: "drawOutro",
+    value: function drawOutro(score) {
+      console.log('drawOutro');
+      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.fillStyle = "rgba(255,255,255,1)";
+      this.ctx.fillRect(1, 1, 478, 638);
+      this.ctx.font = "50px Open Sans";
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText("Game Over!", 140, 150);
+      this.ctx.fillText("Score: ".concat(score), 140, 250);
+      this.drawPlayAgain();
+    }
+  }, {
+    key: "drawPlayAgain",
+    value: function drawPlayAgain() {}
   }]);
 
   return IntroOutro;
@@ -996,7 +1016,7 @@ function () {
     _classCallCheck(this, Timer);
 
     this.start = Date.now();
-    this.time = 60;
+    this.time = 5;
   }
 
   _createClass(Timer, [{
@@ -1012,7 +1032,7 @@ function () {
     key: "countDown",
     value: function countDown() {
       if (this.time > 0) {
-        this.time = 60 - Math.floor((Date.now() - this.start) / 1000);
+        this.time = 5 - Math.floor((Date.now() - this.start) / 1000);
       }
     }
   }]);

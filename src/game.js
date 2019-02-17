@@ -81,7 +81,12 @@ class Game {
   }
 
   gameOverListener() {
-    if (this.board.timer.time == 0) this.endGame();
+    if (this.board.timer.time == 0) {
+      clearInterval(this.gameOverListenerInt);
+      this.gameOngoing = false;
+      this.ctx.clearRect(1, 1, 478, 638);
+      this.introOutro.drawOutro(this.board.score.score);
+    }
   }
 
   gameStartListener(){

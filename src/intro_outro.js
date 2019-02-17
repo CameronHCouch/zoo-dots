@@ -100,27 +100,24 @@ class IntroOutro {
 
   }
 
-  drawGameOver() {
-    this.ctx.clearRect(0, 0, 480, 640);
+  drawOutro(score){
+    console.log('drawOutro')
+
+    this.ctx.clearRect(1, 1, 478, 638);
+    this.ctx.fillStyle = "rgba(255,255,255,1)";
+    this.ctx.fillRect(1, 1, 478, 638);
+
+    this.ctx.font = "50px Open Sans";
+    this.ctx.fillStyle = 'black';
+    this.ctx.fillText("Game Over!", 140, 150);
+    this.ctx.fillText(`Score: ${score}`, 140, 250);
+
+    this.drawPlayAgain();
   }
 
-  // mouseDownHandler(e) {
-  //   this.grid.handleMouseDown(e);
-  //   this.grid.toggleLineDrawing('on');
-  //   this.handleMouseMove = true;
-  // }
-
-  // mouseUpHandler(e) {
-  //   this.grid.handleMouseUp(e);
-  //   this.grid.toggleLineDrawing('off');
-  //   this.handleMouseMove = false;
-  // }
-
-  // mouseMoveHandler(e) {
-  //   if (this.handleMouseMove) {
-  //     this.grid.connectDots(e);
-  //   }
-  // }
+  drawPlayAgain(){
+    
+  }
 }
 
 export default IntroOutro;
