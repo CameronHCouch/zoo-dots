@@ -6,7 +6,7 @@ class Dot {
     this.species = sentinel || this.randomSpecies();
     this.pos = pos;
     this.margin = 50;
-    this.yStart = 150;
+    this.yStart = 92.5;
     this.xStart = 80;
     this.x = this.dotWidth + (this.margin * this.pos[0]) + this.xStart,
     this.y = this.dotHeight + (this.margin * this.pos[1]) + this.yStart

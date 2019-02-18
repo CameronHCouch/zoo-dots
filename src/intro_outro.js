@@ -137,6 +137,9 @@ class IntroOutro {
   }
 
   drawPlayAgain(){
+    this.ctx.clearRect(155, 342, 80, 80);
+    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    this.ctx.fillRect(155, 342, 80, 80);
     this.ctx.beginPath();
     this.ctx.fillStyle = '#ea8700';
     this.ctx.arc(195, 380, 40, 0, 2 * Math.PI);
@@ -144,11 +147,14 @@ class IntroOutro {
 
     this.ctx.font = "15px Open Sans";
     this.ctx.fillStyle = 'black';
-    this.ctx.fillText("Play", 180, 370);
-    this.ctx.fillText("Again", 175, 390);
+    this.ctx.fillText("Play", 180, 375);
+    this.ctx.fillText("Again", 175, 395);
   }
 
   drawMenuButton(){
+    this.ctx.clearRect(247, 325, 80, 80);
+    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    this.ctx.fillRect(247, 325, 80, 80);
     this.ctx.beginPath();
     this.ctx.fillStyle = '#8ecb1e';
     this.ctx.arc(285, 380, 40, 0, 2 * Math.PI);
@@ -156,8 +162,8 @@ class IntroOutro {
 
     this.ctx.font = "15px Open Sans";
     this.ctx.fillStyle = 'black';
-    this.ctx.fillText("Main", 268, 370);
-    this.ctx.fillText("Menu", 265, 390);
+    this.ctx.fillText("Main", 267, 375);
+    this.ctx.fillText("Menu", 264, 395);
   }
 
   handleOutroClick(e) {
@@ -186,7 +192,7 @@ class IntroOutro {
     //play again button
     if ((e.offsetX >= 155) && (e.offsetX <= 240) && (e.offsetY >= 342) && (e.offsetY <= 421)) {
       this.ctx.clearRect(155, 342, 80, 80);
-      this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+      this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
       this.ctx.fillRect(155, 342, 80, 80);
       this.ctx.beginPath();
       this.ctx.fillStyle = '#fa8700';
@@ -195,21 +201,10 @@ class IntroOutro {
 
       this.ctx.font = "15px Open Sans";
       this.ctx.fillStyle = 'white';
-      this.ctx.fillText("Play", 180, 370);
-      this.ctx.fillText("Again", 175, 390);
+      this.ctx.fillText("Play", 180, 375);
+      this.ctx.fillText("Again", 175, 395);
     } else {
-      this.ctx.clearRect(155, 342, 80, 80);
-      this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
-      this.ctx.fillRect(155, 342, 80, 80);
-      this.ctx.beginPath();
-      this.ctx.fillStyle = '#ea8700';
-      this.ctx.arc(195, 380, 40, 0, 2 * Math.PI);
-      this.ctx.fill();
-
-      this.ctx.font = "15px Open Sans";
-      this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Play", 180, 370);
-      this.ctx.fillText("Again", 175, 390);
+      this.drawPlayAgain();
     }
     // main menu button
     if ((e.offsetX >= 247) && (e.offsetX <= 325) && (e.offsetY >= 342) && (e.offsetY <= 421)) {
@@ -223,21 +218,10 @@ class IntroOutro {
 
       this.ctx.font = "15px Open Sans";
       this.ctx.fillStyle = 'white';
-      this.ctx.fillText("Main", 268, 370);
-      this.ctx.fillText("Menu", 265, 390);
+      this.ctx.fillText("Main", 267, 375);
+      this.ctx.fillText("Menu", 264, 395);
     } else {
-      this.ctx.clearRect(247, 325, 80, 80);
-      this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
-      this.ctx.fillRect(247, 325, 80, 80);
-      this.ctx.beginPath();
-      this.ctx.fillStyle = '#8ecb1e';
-      this.ctx.arc(285, 380, 40, 0, 2 * Math.PI);
-      this.ctx.fill();
-
-      this.ctx.font = "15px Open Sans";
-      this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Main", 268, 370);
-      this.ctx.fillText("Menu", 265, 390);
+      this.drawMenuButton();
     }
   }
   
