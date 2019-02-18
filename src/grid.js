@@ -166,7 +166,7 @@ class Grid {
   }
 
   clearLine(){
-    this.ctx2.clearRect(0, 0, 480, 640);
+    this.ctx2.clearRect(0, 0, 480, 510);
   }
 
   drawConnection(){

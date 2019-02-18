@@ -259,8 +259,8 @@ function () {
     this.handleMouseMove = false;
     this.bgMusic = "";
     this.soundMuted = false;
-    this.soundButtonX = 425;
-    this.soundButtonY = 590;
+    this.soundButtonX = 445;
+    this.soundButtonY = 475;
     this.gameOver = true;
     this.gameOngoing = false;
     this.introOutro = new _intro_outro__WEBPACK_IMPORTED_MODULE_0__["default"](ctx);
@@ -352,7 +352,7 @@ function () {
         clearInterval(this.gameOverListenerInt);
         this.board.timer.reset();
         this.gameOngoing = false;
-        this.ctx.clearRect(1, 1, 478, 638);
+        this.ctx.clearRect(1, 1, 478, 508);
         this.introOutro.drawOutro(this.board.score.score);
         this.drawSoundButton(this.ctx, this.soundImage());
       }
@@ -361,7 +361,7 @@ function () {
     key: "gameStartListener",
     value: function gameStartListener() {
       if (this.introOutro.beginGame) {
-        this.ctx.clearRect(1, 1, 478, 638);
+        this.ctx.clearRect(1, 1, 478, 508);
         clearInterval(this.startListenerInt);
         this.gameOngoing = true;
         this.drawSoundButton(this.ctx, this.soundImage());
@@ -701,7 +701,7 @@ function () {
   }, {
     key: "clearLine",
     value: function clearLine() {
-      this.ctx2.clearRect(0, 0, 480, 640);
+      this.ctx2.clearRect(0, 0, 480, 510);
     }
   }, {
     key: "drawConnection",
@@ -842,6 +842,8 @@ function () {
     this.hoverDescription = this.hoverDescription.bind(this);
     this.handleOutroClick = this.handleOutroClick.bind(this);
     this.handleOutroHover = this.handleOutroHover.bind(this);
+    this.timedModeX = 240;
+    this.timedModeY = 300;
   }
 
   _createClass(IntroOutro, [{
@@ -849,9 +851,9 @@ function () {
     value: function drawIntro() {
       this.canvas.addEventListener("click", this.selectGameMode, false);
       this.canvas.addEventListener("mousemove", this.hoverDescription, false);
-      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.clearRect(1, 1, 478, 508);
       this.ctx.fillStyle = "rgba(255,255,255,0.5)";
-      this.ctx.fillRect(1, 1, 478, 638);
+      this.ctx.fillRect(1, 1, 478, 508);
       this.ctx.font = "50px Open Sans";
       this.ctx.fillStyle = 'black';
       this.ctx.fillText("Zoo Dots!", 140, 150);
@@ -860,15 +862,17 @@ function () {
   }, {
     key: "drawTimedMode",
     value: function drawTimedMode(ctx) {
+      var _this = this;
+
       ctx.beginPath();
       ctx.fillStyle = '#ea8700';
-      ctx.arc(240, 350, 50, 0, 2 * Math.PI);
+      ctx.arc(this.timedModeX, this.timedModeY, 50, 0, 2 * Math.PI);
       ctx.fill();
       var img = new Image(65, 65);
 
       img.onload = function () {
         ctx.beginPath();
-        ctx.drawImage(img, 207.5, 317.5, 65, 65);
+        ctx.drawImage(img, _this.timedModeX - 32.5, _this.timedModeY - 32.5, 65, 65);
         ctx.closePath();
         ctx.fill();
       };
@@ -878,17 +882,17 @@ function () {
   }, {
     key: "selectGameMode",
     value: function selectGameMode(e) {
-      var _this = this;
+      var _this2 = this;
 
       e.preventDefault();
 
-      if (e.offsetX >= 193 && e.offsetX <= 292 && e.offsetY >= 301 && e.offsetY <= 400) {
+      if (this.timedModePosition(e)) {
         this.ctx.beginPath();
         this.ctx.fillStyle = '#8ecb1e';
-        this.ctx.arc(240, 350, 50, 0, 2 * Math.PI);
+        this.ctx.arc(this.timedModeX, this.timedModeY, 50, 0, 2 * Math.PI);
         this.ctx.fill();
         this.beginGame = true;
-        this.ctx.clearRect(1, 1, 478, 638);
+        this.ctx.clearRect(1, 1, 478, 508);
         this.canvas.removeEventListener("click", this.selectGameMode);
         this.canvas.removeEventListener("mousemove", this.hoverDescription);
       }
@@ -896,39 +900,44 @@ function () {
       var img = new Image(65, 65);
 
       img.onload = function () {
-        _this.ctx.beginPath();
+        _this2.ctx.beginPath();
 
-        _this.ctx.drawImage(img, 207.5, 317.5, 65, 65);
+        _this2.ctx.drawImage(img, _this2.timedModeX - 32.5, _this2.timedModeY - 32.5, 65, 65);
 
-        _this.ctx.closePath();
+        _this2.ctx.closePath();
 
-        _this.ctx.fill();
+        _this2.ctx.fill();
       };
 
       img.src = "./assets/five-oclock.png";
     }
   }, {
+    key: "timedModePosition",
+    value: function timedModePosition(e) {
+      return Boolean(e.offsetX >= this.timedModeX - 50 && e.offsetX <= this.timedModeX + 50 && e.offsetY >= this.timedModeY - 50 && e.offsetY <= this.timedModeY + 50);
+    }
+  }, {
     key: "hoverDescription",
     value: function hoverDescription(e) {
-      this.ctx.clearRect(290, 345, 175, 40);
+      this.ctx.clearRect(300, 285, 175, 40);
       this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      this.ctx.fillRect(290, 345, 175, 40);
+      this.ctx.fillRect(300, 285, 175, 40);
 
-      if (e.offsetX >= 193 && e.offsetX <= 292 && e.offsetY >= 301 && e.offsetY <= 400) {
-        this.ctx.clearRect(290, 345, 175, 40);
+      if (this.timedModePosition(e)) {
+        this.ctx.clearRect(300, 285, 175, 40);
         this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        this.ctx.fillRect(290, 345, 175, 40);
+        this.ctx.fillRect(300, 285, 175, 40);
         this.ctx.font = "25px Open Sans";
         this.ctx.fillStyle = 'black';
-        this.ctx.fillText("Timed Mode!", 290, 370);
+        this.ctx.fillText("Timed Mode!", 300, 310);
       }
     }
   }, {
     key: "drawOutro",
     value: function drawOutro(score) {
-      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.clearRect(1, 1, 478, 508);
       this.ctx.fillStyle = "rgba(255,255,255,0.5)";
-      this.ctx.fillRect(1, 1, 478, 638);
+      this.ctx.fillRect(1, 1, 478, 508);
       this.updateHighScore(score);
       this.ctx.font = "45px Open Sans";
       this.ctx.fillStyle = '#3b454d';
@@ -948,8 +957,8 @@ function () {
         this.highScore = score;
         this.ctx.font = "15px Open Sans";
         this.ctx.fillStyle = 'red';
-        this.ctx.fillText("NEW HIGH", 60, 219);
-        this.ctx.fillText("SCORE!", 75, 232);
+        this.ctx.fillText("NEW HIGH", 55, 219);
+        this.ctx.fillText("SCORE!", 70, 234);
       }
     }
   }, {
@@ -985,7 +994,7 @@ function () {
         this.beginGame = true;
         this.canvas.removeEventListener("click", this.handleOutroClick);
         this.canvas.removeEventListener("mousemove", this.handleOutroHover);
-        this.ctx.clearRect(1, 1, 478, 638);
+        this.ctx.clearRect(1, 1, 478, 508);
         this.game.gameOver = false;
         this.game.gameOngoing = true;
         this.game.start();
@@ -995,7 +1004,7 @@ function () {
         this.beginGame = false;
         this.canvas.removeEventListener("click", this.handleOutroClick);
         this.canvas.removeEventListener("mousemove", this.handleOutroHover);
-        this.ctx.clearRect(1, 1, 478, 638);
+        this.ctx.clearRect(1, 1, 478, 508);
         this.game.gameOver = true;
         this.game.start();
       }
@@ -1080,10 +1089,10 @@ __webpack_require__.r(__webpack_exports__);
 document.addEventListener("DOMContentLoaded", function () {
   var canvas = document.getElementById("zoo-canvas");
   canvas.width = 480;
-  canvas.height = 640;
+  canvas.height = 510;
   var canvas2 = document.getElementById("zoo-canvas2");
   canvas2.width = 480;
-  canvas2.height = 640;
+  canvas2.height = 510;
   var ctx = canvas.getContext('2d');
   var ctx2 = canvas2.getContext('2d');
   var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2);

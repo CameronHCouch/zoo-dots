@@ -69,13 +69,13 @@ nav a{
 
 #zoo-canvas{
   width: 480px;
-  height: 640px;
+  height: 510px;
   z-index: 1;
 }
 
 #zoo-canvas2{
   width: 480px;
-  height: 640px;
+  height: 510px;
 }
 
 .center {

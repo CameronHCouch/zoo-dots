@@ -11,8 +11,8 @@ class Game {
     this.handleMouseMove = false;
     this.bgMusic = "";
     this.soundMuted = false;
-    this.soundButtonX = 425;
-    this.soundButtonY = 590;
+    this.soundButtonX = 445;
+    this.soundButtonY = 475;
 
     this.gameOver = true;
     this.gameOngoing = false;
@@ -92,7 +92,7 @@ class Game {
       clearInterval(this.gameOverListenerInt);
       this.board.timer.reset();
       this.gameOngoing = false;
-      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.clearRect(1, 1, 478, 508);
       this.introOutro.drawOutro(this.board.score.score);
       this.drawSoundButton(this.ctx, this.soundImage());
     }
@@ -100,7 +100,7 @@ class Game {
 
   gameStartListener(){
     if (this.introOutro.beginGame) {
-      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.clearRect(1, 1, 478, 508);
       clearInterval(this.startListenerInt);
       this.gameOngoing = true;
       this.drawSoundButton(this.ctx, this.soundImage());

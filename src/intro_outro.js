@@ -9,15 +9,18 @@ class IntroOutro {
     this.hoverDescription = this.hoverDescription.bind(this);
     this.handleOutroClick = this.handleOutroClick.bind(this);
     this.handleOutroHover = this.handleOutroHover.bind(this);
+
+    this.timedModeX = 240;
+    this.timedModeY = 300;
   }
 
   drawIntro() {
     this.canvas.addEventListener("click", this.selectGameMode, false);
     this.canvas.addEventListener("mousemove", this.hoverDescription, false);
 
-    this.ctx.clearRect(1, 1, 478, 638);
+    this.ctx.clearRect(1, 1, 478, 508);
     this.ctx.fillStyle = "rgba(255,255,255,0.5)";
-    this.ctx.fillRect(1,1,478,638);
+    this.ctx.fillRect(1,1,478,508);
 
     this.ctx.font = "50px Open Sans";
     this.ctx.fillStyle = 'black';
@@ -29,7 +32,7 @@ class IntroOutro {
   drawTimedMode(ctx){
     ctx.beginPath();
     ctx.fillStyle = '#ea8700';
-    ctx.arc(240, 350, 50, 0, 2 * Math.PI);
+    ctx.arc(this.timedModeX, this.timedModeY, 50, 0, 2 * Math.PI);
     ctx.fill();
 
     let img = new Image(65, 65);
@@ -37,8 +40,8 @@ class IntroOutro {
         ctx.beginPath();
         ctx.drawImage(
           img,
-          207.5,
-          317.5,
+          this.timedModeX - 32.5,
+          this.timedModeY - 32.5,
           65,
           65,
         );
@@ -50,14 +53,14 @@ class IntroOutro {
 
   selectGameMode(e){
     e.preventDefault();
-    if ((e.offsetX >= 193) && (e.offsetX <= 292) && (e.offsetY >= 301) && (e.offsetY <= 400)) {
+    if (this.timedModePosition(e)) {
       this.ctx.beginPath();
       this.ctx.fillStyle = '#8ecb1e';
-      this.ctx.arc(240, 350, 50, 0, 2 * Math.PI);
+      this.ctx.arc(this.timedModeX, this.timedModeY, 50, 0, 2 * Math.PI);
       this.ctx.fill();
       
       this.beginGame = true;
-      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.clearRect(1, 1, 478, 508);
       this.canvas.removeEventListener("click", this.selectGameMode);
       this.canvas.removeEventListener("mousemove", this.hoverDescription);
     }
@@ -67,8 +70,8 @@ class IntroOutro {
       this.ctx.beginPath();
       this.ctx.drawImage(
         img,
-        207.5,
-        317.5,
+        this.timedModeX - 32.5,
+        this.timedModeY - 32.5,
         65,
         65,
       );
@@ -78,26 +81,33 @@ class IntroOutro {
     img.src = `./assets/five-oclock.png`;
   }
 
-  hoverDescription(e){
-    this.ctx.clearRect(290, 345, 175, 40);
-    this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    this.ctx.fillRect(290, 345, 175, 40);
+  timedModePosition(e){
+    return Boolean((e.offsetX >= this.timedModeX - 50) &&
+      (e.offsetX <= this.timedModeX + 50) &&
+      (e.offsetY >= this.timedModeY - 50) &&
+      (e.offsetY <= this.timedModeY + 50));
+  }
 
-    if ((e.offsetX >= 193) && (e.offsetX <= 292) && (e.offsetY >= 301) && (e.offsetY <= 400)){
-      this.ctx.clearRect(290, 345, 175, 40);
+  hoverDescription(e){
+    this.ctx.clearRect(300, 285, 175, 40);
+    this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    this.ctx.fillRect(300, 285, 175, 40);
+
+    if (this.timedModePosition(e)){
+      this.ctx.clearRect(300, 285, 175, 40);
       this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      this.ctx.fillRect(290, 345, 175, 40);
+      this.ctx.fillRect(300, 285, 175, 40);
       this.ctx.font = "25px Open Sans";
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Timed Mode!", 290, 370);
+      this.ctx.fillText("Timed Mode!", 300, 310);
     }
 
   }
 
   drawOutro(score){
-    this.ctx.clearRect(1, 1, 478, 638);
+    this.ctx.clearRect(1, 1, 478, 508);
     this.ctx.fillStyle = "rgba(255,255,255,0.5)";
-    this.ctx.fillRect(1, 1, 478, 638);
+    this.ctx.fillRect(1, 1, 478, 508);
     
     this.updateHighScore(score);
 
@@ -121,8 +131,8 @@ class IntroOutro {
 
       this.ctx.font = "15px Open Sans";
       this.ctx.fillStyle = 'red';
-      this.ctx.fillText("NEW HIGH", 60, 219);
-      this.ctx.fillText("SCORE!", 75, 232);
+      this.ctx.fillText("NEW HIGH", 55, 219);
+      this.ctx.fillText("SCORE!", 70, 234);
     }
   }
 
@@ -156,7 +166,7 @@ class IntroOutro {
       this.beginGame = true;
       this.canvas.removeEventListener("click", this.handleOutroClick);
       this.canvas.removeEventListener("mousemove", this.handleOutroHover);
-      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.clearRect(1, 1, 478, 508);
       this.game.gameOver = false;
       this.game.gameOngoing = true;
       this.game.start();
@@ -166,7 +176,7 @@ class IntroOutro {
       this.beginGame = false;
       this.canvas.removeEventListener("click", this.handleOutroClick);
       this.canvas.removeEventListener("mousemove", this.handleOutroHover);
-      this.ctx.clearRect(1, 1, 478, 638);
+      this.ctx.clearRect(1, 1, 478, 508);
       this.game.gameOver = true;
       this.game.start();
     }
