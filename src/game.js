@@ -10,7 +10,7 @@ class Game {
 
     this.handleMouseMove = false;
     this.bgMusic = "";
-    this.soundMuted = true;
+    this.soundMuted = false;
     this.soundButtonX = 425;
     this.soundButtonY = 590;
 
@@ -23,11 +23,6 @@ class Game {
     this.musicListener();
   }
 
-  loadBackgroundMusic() {
-    this.bgMusic = new Audio('./assets/sound/zoo_tycoon_theme.mp3');
-    this.bgMusic.loop = true;
-  };
-
   start() {
     this.board = new Board(this.ctx, this.ctx2);
     this.introOutro.game = this;
@@ -35,6 +30,11 @@ class Game {
     this.draw();
     if (!this.bgMusic) this.loadBackgroundMusic();
   }
+
+  loadBackgroundMusic() {
+    this.bgMusic = new Audio('./assets/sound/zoo_tycoon_theme.mp3');
+    this.bgMusic.loop = true;
+  };
 
   musicListener() {
     document.addEventListener("click", (e) => {

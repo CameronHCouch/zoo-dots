@@ -258,7 +258,7 @@ function () {
     this.ctx2 = ctx2;
     this.handleMouseMove = false;
     this.bgMusic = "";
-    this.soundMuted = true;
+    this.soundMuted = false;
     this.soundButtonX = 425;
     this.soundButtonY = 590;
     this.gameOver = true;
@@ -269,18 +269,18 @@ function () {
   }
 
   _createClass(Game, [{
-    key: "loadBackgroundMusic",
-    value: function loadBackgroundMusic() {
-      this.bgMusic = new Audio('./assets/sound/zoo_tycoon_theme.mp3');
-      this.bgMusic.loop = true;
-    }
-  }, {
     key: "start",
     value: function start() {
       this.board = new _game_board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.ctx2);
       this.introOutro.game = this;
       this.draw();
       if (!this.bgMusic) this.loadBackgroundMusic();
+    }
+  }, {
+    key: "loadBackgroundMusic",
+    value: function loadBackgroundMusic() {
+      this.bgMusic = new Audio('./assets/sound/zoo_tycoon_theme.mp3');
+      this.bgMusic.loop = true;
     }
   }, {
     key: "musicListener",
@@ -1163,8 +1163,8 @@ function () {
     _classCallCheck(this, Timer);
 
     this.start = Date.now();
-    this.time = 60;
-    this.startTime = 60;
+    this.time = 10;
+    this.startTime = 10;
   }
 
   _createClass(Timer, [{
@@ -1186,8 +1186,8 @@ function () {
   }, {
     key: "reset",
     value: function reset() {
-      this.startTime = 60;
-      this.time = 60;
+      this.startTime = 10;
+      this.time = 10;
     }
   }]);
 
