@@ -273,7 +273,6 @@ function () {
   _createClass(Game, [{
     key: "start",
     value: function start() {
-      this.board = new _game_board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.ctx2);
       this.introOutro.game = this;
       this.draw();
       if (!this.bgMusic) this.loadBackgroundMusic();
@@ -349,7 +348,7 @@ function () {
   }, {
     key: "gameOverListener",
     value: function gameOverListener() {
-      if (this.board.timer.time == 0) {
+      if (this.board.timer && this.board.timer.time == 0) {
         clearInterval(this.gameOverListenerInt);
         this.board.timer.reset();
         this.gameOngoing = false;
@@ -362,8 +361,10 @@ function () {
     key: "gameStartListener",
     value: function gameStartListener() {
       if (this.introOutro.beginGame) {
+        this.board = new _game_board__WEBPACK_IMPORTED_MODULE_1__["default"](this.ctx, this.ctx2);
         this.ctx.clearRect(1, 1, 478, 508);
         clearInterval(this.startListenerInt);
+        this.board.timer.reset();
         this.gameOngoing = true;
         this.drawSoundButton(this.ctx, this.soundImage());
         this.board.draw();
@@ -379,7 +380,7 @@ function () {
         this.introOutro.drawIntro();
       }
 
-      this.startListenerInt = setInterval(this.gameStartListener.bind(this), 400);
+      this.startListenerInt = setInterval(this.gameStartListener.bind(this), 200);
       this.gameOverListenerInt = setInterval(this.gameOverListener.bind(this), 500);
     }
   }]);
