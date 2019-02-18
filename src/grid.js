@@ -237,6 +237,38 @@ class Grid {
     return false;
   }
 
+  // noRemainingMoves(){
+  //   let dotSpeciesHash = {};
+  //   let anyRemainingMoves = false;
+
+  //   this.dots.forEach((row) => {
+  //     row.forEach((dot) => {
+  //       dotSpeciesHash[dot.pos] = dot.species;
+  //     });
+  //   });
+  //   console.log(Object.keys(dotSpeciesHash));
+
+  //   let dotPosArr = Object.keys(dotSpeciesHash);
+
+  //   dotPosArr.forEach((dot) => {
+  //     let [row,col] = dot.pos;
+  //     const validMoves = [
+  //       [row, col - 1],
+  //       [row, col + 1],
+  //       [row + 1, col],
+  //       [row - 1, col]]
+
+  //     validMoves.forEach((neighbor) => {
+  //       if (dotSpeciesHash[dot] === dotSpeciesHash[neighbor]) {
+  //         anyRemainingMoves = true;
+  //       }
+  //     })
+  //   })
+  //   // console.log('waddup')
+  //   // console.log(anyRemainingMoves);
+  //   // return anyRemainingMoves;
+  // }
+
   draw(ctx) {
     this.dots.forEach((row) => {
       row.forEach((dot) => {

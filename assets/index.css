@@ -47,16 +47,21 @@ i{
   transition: all 0.3s ease;
 }
 
-i:hover{
-  color: white;
-  -webkit-transform: scale(1.25);
-  -ms-transform: scale(1.25);
-  transform: scale(1.25);
-}
+  i:hover{
+    color: white;
+    -webkit-transform: scale(1.25);
+    -ms-transform: scale(1.25);
+    transform: scale(1.25);
+  }
 
 a {
   text-decoration: none;
+  color: black;
 }
+
+  a:hover{
+    color: white;
+  }
 
 nav a{
   margin: 5px;

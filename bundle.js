@@ -371,8 +371,6 @@ function () {
   }, {
     key: "draw",
     value: function draw() {
-      console.log('sound draw?');
-      console.log(this.soundImage());
       this.drawSoundButton(this.ctx, this.soundImage());
 
       if (this.gameOver) {
@@ -440,7 +438,7 @@ function () {
       this.canvas.addEventListener("mousemove", this.mouseMoveHandler, false);
       var int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
       var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
-      var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 750);
+      var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 50);
       this.timeOutListenerInt = setInterval(this.timeOutListener.bind(this, [int1, int2, int3]));
     }
   }, {
@@ -769,7 +767,34 @@ function () {
       }
 
       return false;
-    }
+    } // noRemainingMoves(){
+    //   let dotSpeciesHash = {};
+    //   let anyRemainingMoves = false;
+    //   this.dots.forEach((row) => {
+    //     row.forEach((dot) => {
+    //       dotSpeciesHash[dot.pos] = dot.species;
+    //     });
+    //   });
+    //   console.log(Object.keys(dotSpeciesHash));
+    //   let dotPosArr = Object.keys(dotSpeciesHash);
+    //   dotPosArr.forEach((dot) => {
+    //     let [row,col] = dot.pos;
+    //     const validMoves = [
+    //       [row, col - 1],
+    //       [row, col + 1],
+    //       [row + 1, col],
+    //       [row - 1, col]]
+    //     validMoves.forEach((neighbor) => {
+    //       if (dotSpeciesHash[dot] === dotSpeciesHash[neighbor]) {
+    //         anyRemainingMoves = true;
+    //       }
+    //     })
+    //   })
+    //   // console.log('waddup')
+    //   // console.log(anyRemainingMoves);
+    //   // return anyRemainingMoves;
+    // }
+
   }, {
     key: "draw",
     value: function draw(ctx) {

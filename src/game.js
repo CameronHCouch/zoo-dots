@@ -110,8 +110,6 @@ class Game {
   }
 
   draw() {
-    console.log('sound draw?')
-    console.log(this.soundImage());
     this.drawSoundButton(this.ctx, this.soundImage());
 
     if (this.gameOver) {
