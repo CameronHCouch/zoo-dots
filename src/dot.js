@@ -103,7 +103,9 @@ class Dot {
   }
 
   clearHalo(ctx){
-    ctx.clearRect(this.x - 12.5, this.y-12.5, 55, 55);
+    ctx.clearRect(this.x - 13, this.y-12.5, 55, 55);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillRect(this.x - 13, this.y - 12.5, 55, 55);
   }
 }
     export default Dot;

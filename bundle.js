@@ -216,7 +216,9 @@ function () {
   }, {
     key: "clearHalo",
     value: function clearHalo(ctx) {
-      ctx.clearRect(this.x - 12.5, this.y - 12.5, 55, 55);
+      ctx.clearRect(this.x - 13, this.y - 12.5, 55, 55);
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.fillRect(this.x - 13, this.y - 12.5, 55, 55);
     }
   }]);
 
@@ -331,11 +333,10 @@ function () {
       var _this2 = this;
 
       var img = new Image(25, 25);
-      var backgroundColor = this.gameOngoing ? "rgba(255,255,255,0)" : "rgba(255,255,255,0.5)";
 
       img.onload = function () {
         ctx.clearRect(_this2.soundButtonX, _this2.soundButtonY, 25, 25);
-        ctx.fillStyle = backgroundColor;
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
         ctx.fillRect(_this2.soundButtonX, _this2.soundButtonY, 25, 25);
         ctx.beginPath();
         ctx.drawImage(img, _this2.soundButtonX, _this2.soundButtonY, 25, 25);
@@ -436,8 +437,10 @@ function () {
       this.canvas.addEventListener("mousedown", this.mouseDownHandler, false);
       this.canvas.addEventListener("mouseup", this.mouseUpHandler, false);
       this.canvas.addEventListener("mousemove", this.mouseMoveHandler, false);
+      this.ctx.fillStyle = "rgba(255,255,255,0.5)";
+      this.ctx.fillRect(1, 1, 478, 508);
       var int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
-      var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
+      var int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 500);
       var int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 50);
       this.timeOutListenerInt = setInterval(this.timeOutListener.bind(this, [int1, int2, int3]));
     }
@@ -458,7 +461,7 @@ function () {
   }, {
     key: "validRange",
     value: function validRange(e) {
-      return Boolean(e.offsetX >= 100 && e.offsetX <= 385 && e.offsetY >= 170 && e.offsetY <= 455);
+      return Boolean(e.offsetX >= 100 && e.offsetX <= 385 && e.offsetY >= 120 && e.offsetY <= 400);
     }
   }, {
     key: "mouseDownHandler",
@@ -892,7 +895,6 @@ function () {
         this.ctx.arc(this.timedModeX, this.timedModeY, 50, 0, 2 * Math.PI);
         this.ctx.fill();
         this.beginGame = true;
-        this.ctx.clearRect(1, 1, 478, 508);
         this.canvas.removeEventListener("click", this.selectGameMode);
         this.canvas.removeEventListener("mousemove", this.hoverDescription);
       }
@@ -1000,7 +1002,6 @@ function () {
         this.beginGame = true;
         this.canvas.removeEventListener("click", this.handleOutroClick);
         this.canvas.removeEventListener("mousemove", this.handleOutroHover);
-        this.ctx.clearRect(1, 1, 478, 508);
         this.game.gameOver = false;
         this.game.gameOngoing = true;
         this.game.start();
@@ -1123,6 +1124,8 @@ function () {
     key: "draw",
     value: function draw(ctx) {
       ctx.clearRect(295, 5, 150, 60);
+      ctx.fillStyle = "rgba(255,255,255,0.5)";
+      ctx.fillRect(295, 5, 150, 60);
       ctx.font = "30px Open Sans";
       ctx.fillStyle = 'black';
       ctx.fillText("Score " + this.score, 300, 50);
@@ -1166,6 +1169,8 @@ function () {
     key: "draw",
     value: function draw(ctx) {
       ctx.clearRect(5, 5, 200, 50);
+      ctx.fillStyle = "rgba(255,255,255,0.5)";
+      ctx.fillRect(5, 5, 200, 50);
       ctx.font = "30px Open Sans";
       ctx.fillStyle = 'black';
       ctx.fillText("Time " + this.time, 75, 50);

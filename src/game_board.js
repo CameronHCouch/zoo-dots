@@ -22,9 +22,11 @@ class GameBoard {
     this.canvas.addEventListener("mousedown", this.mouseDownHandler, false);
     this.canvas.addEventListener("mouseup", this.mouseUpHandler, false);
     this.canvas.addEventListener("mousemove", this.mouseMoveHandler, false);
+    this.ctx.fillStyle = "rgba(255,255,255,0.5)";
+    this.ctx.fillRect(1, 1, 478, 508);
     
     let int1 = setInterval(this.grid.draw.bind(this.grid, this.ctx), 50);
-    let int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 1000);
+    let int2 = setInterval(this.timer.draw.bind(this.timer, this.ctx), 500);
     let int3 = setInterval(this.score.draw.bind(this.score, this.ctx), 50);
     this.timeOutListenerInt = setInterval(this.timeOutListener.bind(this, [int1, int2, int3]));
   }
@@ -45,8 +47,8 @@ class GameBoard {
   validRange(e){
     return Boolean((e.offsetX >= 100) &&
       (e.offsetX <= 385) &&
-      (e.offsetY >= 170) &&
-      (e.offsetY <= 455))
+      (e.offsetY >= 120) &&
+      (e.offsetY <= 400))
   }
 
   mouseDownHandler(e) {

@@ -7,7 +7,9 @@ class Timer {
   }
 
   draw(ctx) {
-    ctx.clearRect(5,5,200,50)
+    ctx.clearRect(5,5,200,50);
+    ctx.fillStyle = "rgba(255,255,255,0.5)";
+    ctx.fillRect(5,5,200,50);
     ctx.font = "30px Open Sans";
     ctx.fillStyle = 'black';
     ctx.fillText("Time " + this.time, 75, 50);

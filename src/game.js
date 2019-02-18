@@ -74,10 +74,9 @@ class Game {
 
   drawSoundButton(ctx, imageSource) {
     let img = new Image(25, 25);
-    let backgroundColor = this.gameOngoing ? "rgba(255,255,255,0)" : "rgba(255,255,255,0.5)";
     img.onload = () => {
       ctx.clearRect(this.soundButtonX, this.soundButtonY, 25, 25);
-      ctx.fillStyle = backgroundColor;
+      ctx.fillStyle = "rgba(255,255,255,0.5)";
       ctx.fillRect(this.soundButtonX, this.soundButtonY, 25, 25);
       ctx.beginPath();
       ctx.drawImage(img, this.soundButtonX, this.soundButtonY, 25, 25);
