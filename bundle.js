@@ -367,6 +367,7 @@ function () {
         this.board.timer.reset();
         this.gameOngoing = true;
         this.drawSoundButton(this.ctx, this.soundImage());
+        if (!this.soundMuted) this.bgMusic.play();
         this.board.draw();
       }
     }
@@ -1144,8 +1145,8 @@ function () {
     _classCallCheck(this, Timer);
 
     this.start = Date.now();
-    this.time = 4;
-    this.startTime = 4;
+    this.time = 60;
+    this.startTime = 60;
   }
 
   _createClass(Timer, [{
@@ -1169,8 +1170,8 @@ function () {
   }, {
     key: "reset",
     value: function reset() {
-      this.startTime = 4;
-      this.time = 4;
+      this.startTime = 60;
+      this.time = 60;
     }
   }]);
 

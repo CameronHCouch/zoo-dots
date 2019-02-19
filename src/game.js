@@ -103,6 +103,7 @@ class Game {
       this.board.timer.reset();
       this.gameOngoing = true;
       this.drawSoundButton(this.ctx, this.soundImage());
+      if (!this.soundMuted) this.bgMusic.play();
       this.board.draw();
     }
     
