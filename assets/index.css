@@ -67,6 +67,11 @@ nav a{
   margin: 5px;
 }
 
+p{
+  margin-top: -6px;
+  text-align: center;
+}
+
 #zoo-canvas{
   width: 480px;
   height: 510px;

@@ -842,97 +842,77 @@ function () {
     this.highScore = 0;
     this.beginGame = false;
     this.canvas = document.getElementById("zoo-canvas");
-    this.selectGameMode = this.selectGameMode.bind(this);
-    this.hoverDescription = this.hoverDescription.bind(this);
+    this.selectStart = this.selectStart.bind(this);
+    this.hoverStart = this.hoverStart.bind(this);
     this.handleOutroClick = this.handleOutroClick.bind(this);
     this.handleOutroHover = this.handleOutroHover.bind(this);
-    this.timedModeX = 240;
-    this.timedModeY = 300;
+    this.startButtonX = 240;
+    this.startButtonY = 300;
   }
 
   _createClass(IntroOutro, [{
     key: "drawIntro",
     value: function drawIntro() {
-      this.canvas.addEventListener("click", this.selectGameMode, false);
-      this.canvas.addEventListener("mousemove", this.hoverDescription, false);
+      this.canvas.addEventListener("click", this.selectStart, false);
+      this.canvas.addEventListener("mousemove", this.hoverStart, false);
       this.ctx.clearRect(1, 1, 478, 508);
       this.ctx.fillStyle = "rgba(255,255,255,0.5)";
       this.ctx.fillRect(1, 1, 478, 508);
       this.ctx.font = "50px Open Sans";
       this.ctx.fillStyle = 'black';
-      this.ctx.fillText("Zoo Dots!", 140, 150);
-      this.drawTimedMode(this.ctx);
+      this.ctx.fillText("Zoo Dots!", 127, 150);
+      this.drawStartButton();
     }
   }, {
-    key: "drawTimedMode",
-    value: function drawTimedMode(ctx) {
-      var _this = this;
-
-      ctx.beginPath();
-      ctx.fillStyle = '#ea8700';
-      ctx.arc(this.timedModeX, this.timedModeY, 50, 0, 2 * Math.PI);
-      ctx.fill();
-      var img = new Image(65, 65);
-
-      img.onload = function () {
-        ctx.beginPath();
-        ctx.drawImage(img, _this.timedModeX - 32.5, _this.timedModeY - 32.5, 65, 65);
-        ctx.closePath();
-        ctx.fill();
-      };
-
-      img.src = "./assets/five-oclock.png";
+    key: "drawStartButton",
+    value: function drawStartButton() {
+      this.ctx.clearRect(203, 284, 80, 32);
+      this.ctx.fillStyle = '#ea8700';
+      this.ctx.fillRect(203, 284, 80, 32);
+      this.ctx.beginPath();
+      this.ctx.fillStyle = '#ea8700';
+      this.ctx.arc(this.startButtonX, this.startButtonY, 50, 0, 2 * Math.PI);
+      this.ctx.fill();
+      this.ctx.font = "30px Open Sans";
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText("Start", this.startButtonX - 35, this.startButtonY + 10);
     }
   }, {
-    key: "selectGameMode",
-    value: function selectGameMode(e) {
-      var _this2 = this;
-
+    key: "selectStart",
+    value: function selectStart(e) {
       e.preventDefault();
 
-      if (this.timedModePosition(e)) {
+      if (this.startButtonPosition(e)) {
         this.ctx.beginPath();
         this.ctx.fillStyle = '#8ecb1e';
-        this.ctx.arc(this.timedModeX, this.timedModeY, 50, 0, 2 * Math.PI);
+        this.ctx.arc(this.startButtonX, this.startButtonY, 50.5, 0, 2 * Math.PI);
         this.ctx.fill();
+        this.canvas.removeEventListener("click", this.selectStart);
+        this.canvas.removeEventListener("mousemove", this.hoverStart);
         this.beginGame = true;
-        this.canvas.removeEventListener("click", this.selectGameMode);
-        this.canvas.removeEventListener("mousemove", this.hoverDescription);
       }
-
-      var img = new Image(65, 65);
-
-      img.onload = function () {
-        _this2.ctx.beginPath();
-
-        _this2.ctx.drawImage(img, _this2.timedModeX - 32.5, _this2.timedModeY - 32.5, 65, 65);
-
-        _this2.ctx.closePath();
-
-        _this2.ctx.fill();
-      };
-
-      img.src = "./assets/five-oclock.png";
     }
   }, {
-    key: "timedModePosition",
-    value: function timedModePosition(e) {
-      return Boolean(e.offsetX >= this.timedModeX - 50 && e.offsetX <= this.timedModeX + 50 && e.offsetY >= this.timedModeY - 50 && e.offsetY <= this.timedModeY + 50);
+    key: "startButtonPosition",
+    value: function startButtonPosition(e) {
+      return Boolean(e.offsetX >= this.startButtonX - 50 && e.offsetX <= this.startButtonX + 50 && e.offsetY >= this.startButtonY - 50 && e.offsetY <= this.startButtonY + 50);
     }
   }, {
-    key: "hoverDescription",
-    value: function hoverDescription(e) {
-      this.ctx.clearRect(300, 285, 175, 40);
-      this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      this.ctx.fillRect(300, 285, 175, 40);
-
-      if (this.timedModePosition(e)) {
-        this.ctx.clearRect(300, 285, 175, 40);
-        this.ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        this.ctx.fillRect(300, 285, 175, 40);
-        this.ctx.font = "25px Open Sans";
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillText("Timed Mode!", 300, 310);
+    key: "hoverStart",
+    value: function hoverStart(e) {
+      if (this.startButtonPosition(e)) {
+        this.ctx.clearRect(203, 284, 80, 32);
+        this.ctx.fillStyle = '#ea8700';
+        this.ctx.fillRect(203, 284, 80, 32);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = '#ea8700';
+        this.ctx.arc(this.startButtonX, this.startButtonY, 50, 0, 2 * Math.PI);
+        this.ctx.fill();
+        this.ctx.font = "30px Open Sans";
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText("Start", this.startButtonX - 35, this.startButtonY + 10);
+      } else {
+        this.drawStartButton();
       }
     }
   }, {
@@ -986,7 +966,7 @@ function () {
       this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
       this.ctx.fillRect(247, 325, 80, 80);
       this.ctx.beginPath();
-      this.ctx.fillStyle = '#8ecb1e';
+      this.ctx.fillStyle = '#7ecb1e';
       this.ctx.arc(285, 380, 40, 0, 2 * Math.PI);
       this.ctx.fill();
       this.ctx.font = "15px Open Sans";
@@ -1043,7 +1023,7 @@ function () {
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         this.ctx.fillRect(247, 325, 80, 80);
         this.ctx.beginPath();
-        this.ctx.fillStyle = '#7ecb1e';
+        this.ctx.fillStyle = '#8ecb1e';
         this.ctx.arc(285, 380, 40, 0, 2 * Math.PI);
         this.ctx.fill();
         this.ctx.font = "15px Open Sans";
@@ -1075,24 +1055,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./src/game.js");
 
 document.addEventListener("DOMContentLoaded", function () {
-  var canvas = document.getElementById("zoo-canvas");
-  canvas.width = 480;
-  canvas.height = 510;
-  var canvas2 = document.getElementById("zoo-canvas2");
-  canvas2.width = 480;
-  canvas2.height = 510;
-  var ctx = canvas.getContext('2d');
-  var ctx2 = canvas2.getContext('2d');
-  var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2);
+  document.fonts.ready.then(function () {
+    var canvas = document.getElementById("zoo-canvas");
+    canvas.width = 480;
+    canvas.height = 510;
+    var canvas2 = document.getElementById("zoo-canvas2");
+    canvas2.width = 480;
+    canvas2.height = 510;
+    var ctx = canvas.getContext('2d');
+    var ctx2 = canvas2.getContext('2d');
+    var game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, ctx2);
 
-  function draw(ctx) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "black";
-    ctx.strokeRect(0, 0, canvas.width, canvas.height);
-    game.start();
-  }
+    function draw(ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "black";
+      ctx.strokeRect(0, 0, canvas.width, canvas.height);
+      game.start();
+    }
 
-  draw(ctx);
+    draw(ctx);
+  });
 });
 
 /***/ }),
@@ -1162,8 +1144,8 @@ function () {
     _classCallCheck(this, Timer);
 
     this.start = Date.now();
-    this.time = 10;
-    this.startTime = 10;
+    this.time = 4;
+    this.startTime = 4;
   }
 
   _createClass(Timer, [{
@@ -1187,8 +1169,8 @@ function () {
   }, {
     key: "reset",
     value: function reset() {
-      this.startTime = 10;
-      this.time = 10;
+      this.startTime = 4;
+      this.time = 4;
     }
   }]);
 
