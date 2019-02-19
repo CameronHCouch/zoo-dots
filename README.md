@@ -1,15 +1,10 @@
 # Zoo Dots
 ## Background
-In Zoo Dots, players match two or more animals of the same species. Using only horizontal and vertical lines, players draw a continuous line between neighboring animals, earning points equal to the number selected. Selected animals disappear, existing animals shift down to replace those that were removed, and new animals fall from above to fill any gaps. If a player makes a 2x2 square, every animal of that species is removed from the board.
-
-There are multiple game modes:
-Timed games last for one minute.
-Infinite games run until the board is out of moves.
-(Bonus: Limited move rounds run for a fixed number of turns.)
+In Zoo Dots, players match two or more animals of the same species. Using only horizontal and vertical lines, players draw a continuous line between neighboring animals, earning points equal to the number selected. Selected animals disappear, existing animals shift down to replace those that were removed, and new animals fall from above to fill any gaps. If a player makes a 2x2 square, every animal of that species is removed from the board. The game ends after 60 seconds.
 
 ## Functionality and MVP
 In this game, players will:
-- [ ] Choose a game mode (infinite and timed)
+
 - [x] Toggle sound
 - [x] Click and drag to select 2+ neighbors
 - [x] Undo a selection by reversing the path their mouse traced
@@ -43,7 +38,7 @@ Zoo Dots will be made using vanilla JS, HTML5, and CSS3. Animal images courtesy 
 ## Implementation Timeline
 
 ### Day One
-- Create intro screen with links, settings, and game mode buttons
+- Create intro screen with links, settings, and start button
 - Create grid & populate grid with animals
 - Generate selection logic for neighboring animals
 
@@ -56,12 +51,13 @@ Zoo Dots will be made using vanilla JS, HTML5, and CSS3. Animal images courtesy 
 
 ### Day Three
 - Game Over screen
-- Ending logic for both Time and Infinite modes
+- Ending logic
 - Scorekeeping and reporting of final scores
 
 
 ## Bonus Features
 - [ ] Add limited moves mode
+- [ ] Add infinite mode
 - [ ] Implement various powerups/obstacles
 - [ ] Add puzzle mode(?)
-- [ ] Add other themes
+- [ ] Add unlockable themes
