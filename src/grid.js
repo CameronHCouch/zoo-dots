@@ -195,7 +195,7 @@ class Grid {
       return ((e.offsetX - dot.x <= 25) && (e.offsetY - dot.y <= 25))
     });
 
-    if ((neighborDot.species === this.startDot.species) &&
+    if ((neighborDot && (neighborDot.species === this.startDot.species)) &&
        (!this.chainedDots.includes(neighborDot)) &&
        (this.validMove(neighborDot))
        ){

@@ -733,7 +733,7 @@ function () {
         return e.offsetX - dot.x <= 25 && e.offsetY - dot.y <= 25;
       });
 
-      if (neighborDot.species === this.startDot.species && !this.chainedDots.includes(neighborDot) && this.validMove(neighborDot)) {
+      if (neighborDot && neighborDot.species === this.startDot.species && !this.chainedDots.includes(neighborDot) && this.validMove(neighborDot)) {
         neighborDot.activate();
         this.chainedDots.push(neighborDot);
         this.drawConnection();
@@ -772,34 +772,7 @@ function () {
       }
 
       return false;
-    } // noRemainingMoves(){
-    //   let dotSpeciesHash = {};
-    //   let anyRemainingMoves = false;
-    //   this.dots.forEach((row) => {
-    //     row.forEach((dot) => {
-    //       dotSpeciesHash[dot.pos] = dot.species;
-    //     });
-    //   });
-    //   console.log(Object.keys(dotSpeciesHash));
-    //   let dotPosArr = Object.keys(dotSpeciesHash);
-    //   dotPosArr.forEach((dot) => {
-    //     let [row,col] = dot.pos;
-    //     const validMoves = [
-    //       [row, col - 1],
-    //       [row, col + 1],
-    //       [row + 1, col],
-    //       [row - 1, col]]
-    //     validMoves.forEach((neighbor) => {
-    //       if (dotSpeciesHash[dot] === dotSpeciesHash[neighbor]) {
-    //         anyRemainingMoves = true;
-    //       }
-    //     })
-    //   })
-    //   // console.log('waddup')
-    //   // console.log(anyRemainingMoves);
-    //   // return anyRemainingMoves;
-    // }
-
+    }
   }, {
     key: "draw",
     value: function draw(ctx) {
