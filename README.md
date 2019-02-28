@@ -1,63 +1,98 @@
 # Zoo Dots
+Visit [Zoo Dots](https://www.cameroncouch.me/zoo-dots)!
+
 ## Background
-In Zoo Dots, players match two or more animals of the same species. Using only horizontal and vertical lines, players draw a continuous line between neighboring animals, earning points equal to the number selected. Selected animals disappear, existing animals shift down to replace those that were removed, and new animals fall from above to fill any gaps. If a player makes a 2x2 square, every animal of that species is removed from the board. The game ends after 60 seconds.
+In Zoo Dots, players click and drag to match two or more animals of the same species, earning points equal to the number selected. If a player makes a 2x2 square, every animal of that species is removed from the board. How many points can you get in 60 seconds?
 
-## Functionality and MVP
-In this game, players will:
-
-- [x] Toggle sound
-- [x] Click and drag to select 2+ neighbors
-- [x] Undo a selection by reversing the path their mouse traced
-- [x] Remove all animals of a given species when a square is made
-- [x] See their final score when the game is over
-- [x] See their top score
-- [x] Play Again or Return to Home Screen
-
-Additional MVPs:
-- [x] Concise tutorial text for new players
-- [ ] A production README
+![Gif Demonstration](https://user-images.githubusercontent.com/43548466/53589499-8fad3000-3b5d-11e9-9e5b-d731eb36db2a.gif)
 
 ## Technologies, Libraries, APIs
+Zoo Dots was made using vanilla JavaScript, HTML5/CSS3, and Object-Oriented design principles. Animal images courtesy of [EmojiOne](https://www.emojione.com/).
 
-Zoo Dots will be made using vanilla JS, HTML5, and CSS3. Animal images courtesy of [EmojiOne](https://www.emojione.com/).
+## Features
 
-## File Architecture
+### Mouse Event Handlers
 
-- index.js
-- game.js
-- board.js
-- grid.js
-- animal.js
-- util.js
+```javascript
+// src/game_board.js
+  mouseDownHandler(e) {
+    this.grid.handleMouseDown(e);
+    this.grid.toggleLineDrawing('on');
+    if (this.validRange(e)) this.handleMouseMove = true;
+  }
+  
+  mouseUpHandler(e) {
+    this.grid.handleMouseUp(e);
+    this.grid.toggleLineDrawing('off');
+    this.handleMouseMove = false;
+  }
 
-## Wireframes
+  mouseMoveHandler(e) {
+    if (this.handleMouseMove) {
+      this.grid.connectDots(e);
+    }
+  }
+```
 
-![js-wireframe](https://user-images.githubusercontent.com/43548466/52319689-1cb6fc00-2999-11e9-9788-f1d3ca6c97c7.jpg)
-![dots replaced with animal faces](https://user-images.githubusercontent.com/43548466/52355804-0a70a880-2a01-11e9-9696-da476d8813d3.png)
+### Selection and De-Selection of 'Dots'
 
-## Implementation Timeline
+On click, the GameBoard class passes MouseDown and MouseMove handlers to the Grid. If the MouseDown handler starts on a valid animal face (referred to as 'dots'), the Grid class's connectDots function uses MouseMove events to dynamically determine whether a connecting line should be drawn between dots.
 
-### Day One
-- Create intro screen with links, settings, and start button
-- Create grid & populate grid with animals
-- Generate selection logic for neighboring animals
+```javascript
+// src/grid.js
+  connectDots(e) {
+    this.drawLine(e);
 
-### Day Two
-- Implement selection logic for neighbors
-  - Already-selected animals cannot be chosen again or crossed over
-  - Animals must be horizontal or vertical neighbors
-- Handle removal of animals from board and their replacement
-- Implement de-selection of animals by reversing mouse path
+    let flattened = this.dots.flat();
+    let neighborDot = flattened.find((dot) => {
+      return ((e.offsetX - dot.x <= 25) && (e.offsetY - dot.y <= 25))
+    });
 
-### Day Three
-- Game Over screen
-- Ending logic
-- Scorekeeping and reporting of final scores
+    if ((neighborDot.species === this.startDot.species) &&
+       (!this.chainedDots.includes(neighborDot)) &&
+       (this.validMove(neighborDot))
+       ){
+      neighborDot.activate();
+      this.chainedDots.push(neighborDot);
+      this.drawConnection();
+    }
 
+    if ((neighborDot === this.chainedDots[this.chainedDots.length-2])){
+      this.deselectDot(this.chainedDots[this.chainedDots.length - 1]);
+      this.deselectDot(neighborDot);
+      if (this.chainedDots.length === 1) {
+        this.deselectDot(this.chainedDots[0]);
+      }
+    }
+  }
+```
 
-## Bonus Features
+### Valid Moves
+
+To check for valid moves, I compare the last selected dot with currently moused-over dot (neighbor). If the neighbor's position is included in the validMoves array, then the move is legitimate.
+
+```javascript
+// src/grid.js
+  validMove(neighbor){
+    let lastSelected = this.chainedDots[this.chainedDots.length-1];
+    let [row,col] = lastSelected.pos;
+    const validMoves = [
+      [row, col-1].join(','),
+      [row, col+1].join(','),
+      [row+1, col].join(','),
+      [row-1, col].join(',')
+    ];
+    // array checking in JS is tricky, so convert to string
+    if (validMoves.includes(neighbor.pos.join(','))){ 
+      return true ;
+    }
+    return false;
+  }
+```
+
+## Future Directions
 - [ ] Add limited moves mode
 - [ ] Add infinite mode
 - [ ] Implement various powerups/obstacles
-- [ ] Add puzzle mode(?)
+- [ ] Add puzzle mode
 - [ ] Add unlockable themes
