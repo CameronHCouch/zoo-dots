@@ -50,6 +50,7 @@ div{
 
 nav{
   margin-left: 15px;
+  min-width: 178px;
 }
 
 i{
@@ -98,3 +99,11 @@ p{
   position: absolute;
   top: 0; left: 0; bottom: 500; right: 0;
 }
+
+
+@media screen and (max-width: 419px) {
+  nav{
+      margin-left: 15px;
+      min-width: 90px;
+      max-width: 80px;
+  }
