@@ -101,9 +101,25 @@ p{
 }
 
 
-@media screen and (max-width: 419px) {
-  nav{
-      margin-left: 15px;
-      min-width: 90px;
-      max-width: 80px;
+@media screen and (max-width: 625px) {
+  header{
+    align-items: center;
   }
+  
+  h1{
+    font-size: 45px;
+  }
+  
+  nav{
+    margin-left: 15px;
+    min-width: 130px;
+    max-width: 130px;
+    text-align: center;;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  h1{
+    font-size: 40px;
+  }
+}
